@@ -2,15 +2,64 @@ import { NbMenuItem } from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
-    title: 'E-commerce',
-    icon: 'nb-e-commerce',
-    link: '/pages/dashboard',
+    title: 'Book Dashboard',
+    icon: 'nb-home',
+    link: '/bookui/book-dashboard',
     home: true,
   },
   {
-    title: 'IoT Dashboard',
-    icon: 'nb-home',
-    link: '/pages/iot-dashboard',
+    title: 'User Dashboard',
+    icon: 'nb-person',
+    link: '/bookui/user-dashboard',
+  },
+  {
+    title: 'E-Commerce Dashboard',
+    icon: 'nb-e-commerce',
+    link: '/bookui/dashboard',
+  },
+  {
+    title: 'IOT Dashboard',
+    icon: 'nb-',
+    link: '/bookui/iot-dashboard',
+  },
+  {
+    title: 'ADMINISTRATION',
+    group: true,
+  },
+  {
+    title: 'Role Management',
+    icon: 'nb-flame-circled',
+    link: '/bookui/admin/role-management',
+    children: [],
+  },
+  {
+    title: 'User Management',
+    icon: 'nb-gear',
+    link: '/bookui/admin/user-management',
+    children: [],
+  },
+  {
+    title: 'Book Management',
+    icon: 'nb-star',
+    link: '/bookui/admin/book-management',
+    children: [
+      {
+        title: 'Book',
+        link: '/bookui/admin/book-management/book',
+      },
+      {
+        title: 'Chapter',
+        link: '/bookui/admin/book-management/chapter',
+      },
+      {
+        title: 'Section',
+        link: '/bookui/admin/book-management/section',
+      },
+      {
+        title: 'Subsection',
+        link: '/bookui/admin/book-management/subsection',
+      },
+    ],
   },
   {
     title: 'FEATURES',
@@ -19,39 +68,39 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'UI Features',
     icon: 'nb-keypad',
-    link: '/pages/ui-features',
+    link: '/bookui/ui-features',
     children: [
       {
         title: 'Buttons',
-        link: '/pages/ui-features/buttons',
+        link: '/bookui/ui-features/buttons',
       },
       {
         title: 'Grid',
-        link: '/pages/ui-features/grid',
+        link: '/bookui/ui-features/grid',
       },
       {
         title: 'Icons',
-        link: '/pages/ui-features/icons',
+        link: '/bookui/ui-features/icons',
       },
       {
         title: 'Modals',
-        link: '/pages/ui-features/modals',
+        link: '/bookui/ui-features/modals',
       },
       {
         title: 'Popovers',
-        link: '/pages/ui-features/popovers',
+        link: '/bookui/ui-features/popovers',
       },
       {
         title: 'Typography',
-        link: '/pages/ui-features/typography',
+        link: '/bookui/ui-features/typography',
       },
       {
         title: 'Animated Searches',
-        link: '/pages/ui-features/search-fields',
+        link: '/bookui/ui-features/search-fields',
       },
       {
         title: 'Tabs',
-        link: '/pages/ui-features/tabs',
+        link: '/bookui/ui-features/tabs',
       },
     ],
   },
@@ -61,11 +110,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Form Inputs',
-        link: '/pages/forms/inputs',
+        link: '/bookui/forms/inputs',
       },
       {
         title: 'Form Layouts',
-        link: '/pages/forms/layouts',
+        link: '/bookui/forms/layouts',
       },
     ],
   },
@@ -75,10 +124,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Tree',
-        link: '/pages/components/tree',
+        link: '/bookui/components/tree',
       }, {
         title: 'Notifications',
-        link: '/pages/components/notifications',
+        link: '/bookui/components/notifications',
       },
     ],
   },
@@ -88,19 +137,19 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Google Maps',
-        link: '/pages/maps/gmaps',
+        link: '/bookui/maps/gmaps',
       },
       {
         title: 'Leaflet Maps',
-        link: '/pages/maps/leaflet',
+        link: '/bookui/maps/leaflet',
       },
       {
         title: 'Bubble Maps',
-        link: '/pages/maps/bubble',
+        link: '/bookui/maps/bubble',
       },
       {
         title: 'Search Maps',
-        link: '/pages/maps/searchmap',
+        link: '/bookui/maps/searchmap',
       },
     ],
   },
@@ -110,15 +159,15 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Echarts',
-        link: '/pages/charts/echarts',
+        link: '/bookui/charts/echarts',
       },
       {
         title: 'Charts.js',
-        link: '/pages/charts/chartjs',
+        link: '/bookui/charts/chartjs',
       },
       {
         title: 'D3',
-        link: '/pages/charts/d3',
+        link: '/bookui/charts/d3',
       },
     ],
   },
@@ -128,11 +177,11 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'TinyMCE',
-        link: '/pages/editors/tinymce',
+        link: '/bookui/editors/tinymce',
       },
       {
         title: 'CKEditor',
-        link: '/pages/editors/ckeditor',
+        link: '/bookui/editors/ckeditor',
       },
     ],
   },
@@ -142,7 +191,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: 'Smart Table',
-        link: '/pages/tables/smart-table',
+        link: '/bookui/tables/smart-table',
       },
     ],
   },
@@ -152,7 +201,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     children: [
       {
         title: '404',
-        link: '/pages/miscellaneous/404',
+        link: '/bookui/miscellaneous/404',
       },
     ],
   },

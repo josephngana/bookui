@@ -1,20 +1,31 @@
-import { RouterModule, Routes } from '@angular/router';
-import { NgModule } from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {NgModule} from '@angular/core';
 
-import { PagesComponent } from './pages.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ECommerceComponent } from './e-commerce/e-commerce.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
+import {PagesComponent} from './pages.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
+import {ECommerceComponent} from './e-commerce/e-commerce.component';
+import {NotFoundComponent} from './miscellaneous/not-found/not-found.component';
+import {BookDashboardComponent} from './book-dashboard/book-dashboard.component';
+import {UserDashboardComponent} from './user-dashboard/user-dashboard.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [{
+    path: 'book-dashboard',
+    component: BookDashboardComponent,
+  }, {
+    path: 'user-dashboard',
+    component: UserDashboardComponent,
+  }, {
     path: 'dashboard',
     component: ECommerceComponent,
   }, {
     path: 'iot-dashboard',
     component: DashboardComponent,
+  }, {
+    path: 'admin',
+    loadChildren: './bookui-admin/bookui-admin.module#BookuiAdminModule',
   }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',

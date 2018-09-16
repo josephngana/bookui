@@ -42,9 +42,9 @@ import {
 } from './pipes';
 import {
   OneColumnLayoutComponent,
-  SampleLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
+  // SampleLayoutComponent,
+  // ThreeColumnsLayoutComponent,
+  // TwoColumnsLayoutComponent,
 } from './layouts';
 import { DEFAULT_THEME } from './styles/theme.default';
 import { COSMIC_THEME } from './styles/theme.cosmic';
@@ -81,9 +81,9 @@ const COMPONENTS = [
   ThemeSettingsComponent,
   TinyMCEComponent,
   OneColumnLayoutComponent,
-  SampleLayoutComponent,
-  ThreeColumnsLayoutComponent,
-  TwoColumnsLayoutComponent,
+  // SampleLayoutComponent,
+  // ThreeColumnsLayoutComponent,
+  // TwoColumnsLayoutComponent,
 ];
 
 const ENTRY_COMPONENTS = [
@@ -101,7 +101,8 @@ const PIPES = [
 const NB_THEME_PROVIDERS = [
   ...NbThemeModule.forRoot(
     {
-      name: 'cosmic',
+      // name: 'cosmic',
+      name: 'corporate',
     },
     [ DEFAULT_THEME, COSMIC_THEME, CORPORATE_THEME ],
   ).providers,
