@@ -19,7 +19,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'IOT Dashboard',
-    icon: 'nb-',
+    icon: 'nb-lightbulb',
     link: '/bookui/iot-dashboard',
   },
   {
