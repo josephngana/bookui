@@ -7,7 +7,7 @@ Please read https://github.com/akveo/ngx-admin/blob/master/CONTRIBUTING.md befor
 
 **I'm submitting a ...**  (check one with "x")
 
-* [ ] bug report
+* [x] bug report
 * [ ] feature request
 * [ ] question about the decisions made in the repository
 
