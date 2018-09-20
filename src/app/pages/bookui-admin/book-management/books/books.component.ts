@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {Book} from '../domain/book';
 
 @Component({
-  selector: 'ngx-book',
-  templateUrl: './book.component.html',
-  styleUrls: ['./book.component.scss'],
+  selector: 'ngx-books',
+  templateUrl: './books.component.html',
+  styleUrls: ['./books.component.scss'],
 })
-export class BookComponent implements OnInit {
+export class BooksComponent implements OnInit {
 
   constructor() {
     this.doShow();

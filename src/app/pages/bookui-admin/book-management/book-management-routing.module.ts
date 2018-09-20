@@ -1,26 +1,26 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {BookManagementComponent} from './book-management.component';
-import {BookComponent} from './book/book.component';
-import {ChapterComponent} from './chapter/chapter.component';
-import {SectionComponent} from './section/section.component';
-import {SubSectionComponent} from './sub-section/sub-section.component';
+import {BooksComponent} from './books/books.component';
+import {ChaptersComponent} from './chapters/chapters.component';
+import {SectionsComponent} from './sections/sections.component';
+import {SubSectionsComponent} from './sub-sections/sub-sections.component';
 
 const routes: Routes = [{
   path: '',
   component: BookManagementComponent,
   children: [{
-    path: 'book',
-    component: BookComponent,
+    path: 'books',
+    component: BooksComponent,
   }, {
-    path: 'chapter',
-    component: ChapterComponent,
+    path: 'chapters',
+    component: ChaptersComponent,
   }, {
-    path: 'section',
-    component: SectionComponent,
+    path: 'sections',
+    component: SectionsComponent,
   }, {
-    path: 'subsection',
-    component: SubSectionComponent,
+    path: 'subsections',
+    component: SubSectionsComponent,
   }],
 }];
 

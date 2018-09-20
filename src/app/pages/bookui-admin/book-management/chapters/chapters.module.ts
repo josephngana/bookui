@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
-import { BookComponent } from './book.component';
+import { CommonModule } from '@angular/common';
+import { ChaptersComponent } from './chapters.component';
 import {ThemeModule} from '../../../../@theme/theme.module';
 
 const components = [
-  BookComponent,
+  ChaptersComponent,
 ];
 
 @NgModule({
   imports: [
+    CommonModule,
     ThemeModule,
   ],
   declarations: [
@@ -17,4 +19,4 @@ const components = [
     ...components,
   ],
 })
-export class BookModule { }
+export class ChaptersModule { }

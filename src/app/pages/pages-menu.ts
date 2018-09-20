@@ -4,13 +4,13 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Book Dashboard',
     icon: 'nb-home',
-    link: '/bookui/book-dashboard',
+    link: '/bookui/books-dashboard',
     home: true,
   },
   {
     title: 'User Dashboard',
     icon: 'nb-person',
-    link: '/bookui/user-dashboard',
+    link: '/bookui/users-dashboard',
   },
   {
     title: 'E-Commerce Dashboard',
@@ -30,13 +30,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
     title: 'Role Management',
     icon: 'nb-flame-circled',
     link: '/bookui/admin/role-management',
-    children: [],
+    children: [
+      {
+        title: 'Roles',
+        link: '/bookui/admin/role-management/roles',
+      },
+    ],
   },
   {
     title: 'User Management',
     icon: 'nb-gear',
     link: '/bookui/admin/user-management',
-    children: [],
+    children: [
+      {
+        title: 'Users',
+        link: '/bookui/admin/user-management/users',
+      },
+    ],
   },
   {
     title: 'Book Management',
@@ -44,20 +54,20 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/bookui/admin/book-management',
     children: [
       {
-        title: 'Book',
-        link: '/bookui/admin/book-management/book',
+        title: 'Books',
+        link: '/bookui/admin/book-management/books',
       },
       {
-        title: 'Chapter',
-        link: '/bookui/admin/book-management/chapter',
+        title: 'Chapters',
+        link: '/bookui/admin/book-management/chapters',
       },
       {
-        title: 'Section',
-        link: '/bookui/admin/book-management/section',
+        title: 'Sections',
+        link: '/bookui/admin/book-management/sections',
       },
       {
-        title: 'Subsection',
-        link: '/bookui/admin/book-management/subsection',
+        title: 'Subsections',
+        link: '/bookui/admin/book-management/subsections',
       },
     ],
   },

@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SubSectionComponent } from './sub-section.component';
+import { RolesComponent } from './roles.component';
 import {ThemeModule} from '../../../../@theme/theme.module';
 
 const components = [
-  SubSectionComponent,
+  RolesComponent,
 ];
 
 @NgModule({
   imports: [
-    CommonModule,
     ThemeModule,
   ],
   declarations: [...components],
   exports: [...components],
 })
-export class SubSectionModule { }
+export class RolesModule { }
