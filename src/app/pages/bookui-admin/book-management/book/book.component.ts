@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Book} from '../domain/book';
 
 @Component({
   selector: 'ngx-book',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    this.doShow();
+  }
 
   ngOnInit() {
+  }
+
+  doShow() {
+    const book = new Book();
+    book.id = '90980980989';
+    console.log(book.id);
   }
 
 }
