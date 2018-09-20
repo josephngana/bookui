@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { BookManagementComponent } from './book-management.component';
 import {ThemeModule} from '../../../@theme/theme.module';
 import {BookManagementRoutingModule} from './book-management-routing.module';
-import {BookModule} from './book/book.module';
-import {ChapterModule} from './chapter/chapter.module';
-import {SectionModule} from './section/section.module';
-import {SubSectionModule} from './sub-section/sub-section.module';
+import {BooksModule} from './books/books.module';
+import {ChaptersModule} from './chapters/chapters.module';
+import {SectionsModule} from './sections/sections.module';
+import {SubSectionsModule} from './sub-sections/sub-sections.module';
 
 const components = [
   BookManagementComponent,
@@ -15,10 +15,10 @@ const components = [
   imports: [
     ThemeModule,
     BookManagementRoutingModule,
-    BookModule,
-    ChapterModule,
-    SectionModule,
-    SubSectionModule,
+    BooksModule,
+    ChaptersModule,
+    SectionsModule,
+    SubSectionsModule,
   ],
   declarations: [
     ...components,

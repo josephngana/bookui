@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChapterComponent } from './chapter.component';
+import { SubSectionsComponent } from './sub-sections.component';
 import {ThemeModule} from '../../../../@theme/theme.module';
 
 const components = [
-  ChapterComponent,
+  SubSectionsComponent,
 ];
 
 @NgModule({
@@ -12,11 +12,7 @@ const components = [
     CommonModule,
     ThemeModule,
   ],
-  declarations: [
-    ...components,
-  ],
-  exports: [
-    ...components,
-  ],
+  declarations: [...components],
+  exports: [...components],
 })
-export class ChapterModule { }
+export class SubSectionsModule { }

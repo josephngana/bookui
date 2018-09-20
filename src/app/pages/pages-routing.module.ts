@@ -12,10 +12,10 @@ const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [{
-    path: 'book-dashboard',
+    path: 'books-dashboard',
     component: BookDashboardComponent,
   }, {
-    path: 'user-dashboard',
+    path: 'users-dashboard',
     component: UserDashboardComponent,
   }, {
     path: 'dashboard',
@@ -52,7 +52,7 @@ const routes: Routes = [{
     loadChildren: './miscellaneous/miscellaneous.module#MiscellaneousModule',
   }, {
     path: '',
-    redirectTo: 'book-dashboard',
+    redirectTo: 'books-dashboard',
     pathMatch: 'full',
   }, {
     path: '**',

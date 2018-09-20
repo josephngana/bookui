@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { SectionComponent } from './section.component';
+import { UsersComponent } from './users.component';
 import {ThemeModule} from '../../../../@theme/theme.module';
 
 const components = [
-  SectionComponent,
+  UsersComponent,
 ];
 
 @NgModule({
   imports: [
-    CommonModule,
     ThemeModule,
   ],
   declarations: [...components],
   exports: [...components],
 })
-export class SectionModule { }
+export class UsersModule { }
