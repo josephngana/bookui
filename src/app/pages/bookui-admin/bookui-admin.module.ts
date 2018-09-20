@@ -5,6 +5,7 @@ import {ThemeModule} from '../../@theme/theme.module';
 import {BookManagementModule} from './book-management/book-management.module';
 import {UserManagementModule} from './user-management/user-management.module';
 import {RoleManagementModule} from './role-management/role-management.module';
+import {SiteManagementModule} from './site-management/site-management.module';
 
 const components = [
   BookuiAdminComponent,
@@ -17,6 +18,7 @@ const components = [
     BookManagementModule,
     UserManagementModule,
     RoleManagementModule,
+    SiteManagementModule,
   ],
   declarations: [
     ...components,

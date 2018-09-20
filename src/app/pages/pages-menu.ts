@@ -49,6 +49,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'Site Management',
+    icon: 'nb-shuffle',
+    link: '/bookui/admin/site-management',
+    children: [
+      {
+        title: 'Sites',
+        link: '/bookui/admin/site-management/sites',
+      },
+    ],
+  },
+  {
     title: 'Book Management',
     icon: 'nb-star',
     link: '/bookui/admin/book-management',

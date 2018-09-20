@@ -14,6 +14,9 @@ const routes: Routes = [{
   }, {
     path: 'role-management',
     loadChildren: './role-management/role-management.module#RoleManagementModule',
+  }, {
+    path: 'site-management',
+    loadChildren: './site-management/site-management.module#SiteManagementModule',
   }],
 }];
 
