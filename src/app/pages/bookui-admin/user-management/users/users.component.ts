@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {User} from '../domain/user';
 
 @Component({
   selector: 'ngx-users',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UsersComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+    this.doShow();
+  }
 
   ngOnInit() {
+  }
+
+  doShow() {
+    const u: User = new User();
+    console.log(u.dateCreated);
   }
 
 }
