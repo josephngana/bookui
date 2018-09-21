@@ -32,7 +32,7 @@ export class ChaptersComponent implements OnInit {
         type: 'string',
       },
       date: {
-        title: 'Last Name',
+        title: 'Date',
         type: 'date',
       },
     },
