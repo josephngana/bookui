@@ -19,6 +19,7 @@ const components = [
     ChaptersModule,
     SectionsModule,
     SubSectionsModule,
+
   ],
   declarations: [
     ...components,
