@@ -23,6 +23,7 @@ export class BooksComponent implements OnInit {
     console.log(littleBlackBook.id);
     console.log('this book was created at: ', littleBlackBook.dateCreated);
     console.log('this book was created at: ', littleWhiteBook.dateCreated);
+    console.log('this book was created at: ', littleWhiteBook.multimedias);
   }
 
 }
