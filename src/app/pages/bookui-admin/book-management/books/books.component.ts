@@ -9,16 +9,20 @@ import {Book} from '../domain/book';
 export class BooksComponent implements OnInit {
 
   constructor() {
-    this.doShow();
   }
 
   ngOnInit() {
+    this.doShow();
   }
 
   doShow() {
-    const book = new Book();
-    book.id = '90980980989';
-    console.log(book.id);
+    const littleBlackBook = new Book();
+    const littleWhiteBook = new Book();
+    littleBlackBook.id = '1254147';
+    littleWhiteBook.id = '8547859';
+    console.log(littleBlackBook.id);
+    console.log('this book was created at: ', littleBlackBook.dateCreated);
+    console.log('this book was created at: ', littleWhiteBook.dateCreated);
   }
 
 }
