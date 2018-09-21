@@ -1,3 +1,10 @@
-<p>
-  roles works!
-</p>
+<nb-card>
+  <nb-card-header>
+    Roles Management
+  </nb-card-header>
+
+  <nb-card-body>
+    <ng2-smart-table [settings]="settings" (deleteConfirm)="onDeleteConfirm($event)">
+    </ng2-smart-table>
+  </nb-card-body>
+</nb-card>
