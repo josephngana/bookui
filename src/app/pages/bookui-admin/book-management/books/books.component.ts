@@ -8,12 +8,64 @@ import {Book} from '../domain/book';
 })
 export class BooksComponent implements OnInit {
 
+  settings = {
+    add: {
+      addButtonContent: '<i class="nb-plus"></i>',
+      createButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+    },
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+      saveButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
+    },
+    columns: {
+      isbn: {
+        title: 'ISBN',
+        type: 'string',
+      },
+      eIsbn: {
+        title: 'e-ISBN',
+        type: 'string',
+      },
+      title: {
+        title: 'Title',
+        type: 'string',
+      },
+      author: {
+        title: 'Author',
+        type: 'string',
+      },
+      publisher: {
+        title: 'Publisher',
+        type: 'string',
+      },
+      date: {
+        title: 'Date',
+        type: 'date',
+      },
+    },
+  };
+
   constructor() {
   }
 
   ngOnInit() {
     this.doShow();
   }
+
+  onDeleteConfirm(event): void {
+    if (window.confirm('Are you sure you want to delete?')) {
+      event.confirm.resolve();
+    } else {
+      event.confirm.reject();
+    }
+  }
+
 
   doShow() {
     const littleBlackBook = new Book();
