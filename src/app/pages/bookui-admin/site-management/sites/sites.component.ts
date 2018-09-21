@@ -23,10 +23,6 @@ export class SitesComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
       siteName: {
         title: 'Site Name',
         type: 'string',
