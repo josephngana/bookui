@@ -1,5 +1,6 @@
 import {BookBase} from './book-base';
 import {Chapter} from './chapter';
+import {Multimedia} from '../../../../shared/domain/multimedia';
 
 export class Book extends BookBase {
   siteId: String;
@@ -8,5 +9,5 @@ export class Book extends BookBase {
   author: String;
   published: String;
   datePublished: Date;
-  chapters: Array<Chapter>;
+  chapters: Array<Chapter> = [];
 }
