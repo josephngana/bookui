@@ -7,9 +7,11 @@ import {ChaptersModule} from './chapters/chapters.module';
 import {SectionsModule} from './sections/sections.module';
 import {SubSectionsModule} from './sub-sections/sub-sections.module';
 import {MultimediaModule} from './multimedia/multimedia.module';
+import {AddBookComponent} from './modals/add-book/add-book.component';
 
 const components = [
   BookManagementComponent,
+  AddBookComponent,
 ];
 
 @NgModule({
@@ -24,6 +26,9 @@ const components = [
   ],
   declarations: [
     ...components,
+  ],
+  entryComponents: [
+    AddBookComponent,
   ],
 })
 export class BookManagementModule { }
