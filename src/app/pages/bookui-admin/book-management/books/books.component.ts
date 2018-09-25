@@ -9,6 +9,7 @@ import {Book} from '../domain/book';
 export class BooksComponent implements OnInit {
 
   settings = {
+    mode: 'external',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -76,6 +77,10 @@ export class BooksComponent implements OnInit {
     console.log('this book was created at: ', littleBlackBook.dateCreated);
     console.log('this book was created at: ', littleWhiteBook.dateCreated);
     console.log('this book was created at: ', littleWhiteBook.multimedias);
+  }
+
+  onCreate(event): void {
+    console.log('gsdfgdsfgsdg');
   }
 
 }
