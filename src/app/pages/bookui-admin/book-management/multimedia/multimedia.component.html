@@ -1,12 +1,12 @@
 <nb-card>
   <nb-card-header>
-    Books
+    Multimedia
   </nb-card-header>
 
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source"
-                     (deleteConfirm)="onDeleteConfirm($event)" (create)="onCreate($event)"
-                     (edit)="onEdit($event)">
+                     (deleteConfirm)="onDeleteConfirm($event)"
+                     (createConfirm)="onCreateConfirm($event)" (editConfirm)="onSaveConfirm($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>

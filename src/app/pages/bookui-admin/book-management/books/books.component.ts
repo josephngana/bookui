@@ -1,14 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import {Book} from '../domain/book';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AddBookComponent} from '../modals/add-book/add-book.component';
+import {DatePipe} from '@angular/common';
+import {LocalDataSource} from 'ng2-smart-table';
 
 @Component({
   selector: 'ngx-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
+  providers: [NgbModal],
 })
 export class BooksComponent implements OnInit {
 
+  source: LocalDataSource;
+
   settings = {
+    mode: 'external',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -24,14 +32,6 @@ export class BooksComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      isbn: {
-        title: 'ISBN',
-        type: 'string',
-      },
-      eIsbn: {
-        title: 'e-ISBN',
-        type: 'string',
-      },
       title: {
         title: 'Title',
         type: 'string',
@@ -44,18 +44,40 @@ export class BooksComponent implements OnInit {
         title: 'Publisher',
         type: 'string',
       },
-      date: {
-        title: 'Date',
-        type: 'date',
+      isbn: {
+        title: 'ISBN',
+        type: 'string',
+      },
+      eIsbn: {
+        title: 'e-ISBN',
+        type: 'string',
+      },
+      datePublished: {
+        title: 'Date Published',
+        type: 'string',
+        valuePrepareFunction: (date) => {
+          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+        },
+      },
+      dateCreated: {
+        title: 'Date Created',
+        type: 'string',
+        addable: false,
+        editable: false,
+        valuePrepareFunction: (date) => {
+          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+        },
       },
     },
   };
 
-  constructor() {
+  constructor(private modalService: NgbModal) {
   }
 
   ngOnInit() {
-    this.doShow();
+    const books: Array<Book> = [];
+    books.push(this.doShow());
+    this.source = new LocalDataSource(books);
   }
 
   onDeleteConfirm(event): void {
@@ -67,15 +89,25 @@ export class BooksComponent implements OnInit {
   }
 
 
-  doShow() {
+  doShow(): Book {
     const littleBlackBook = new Book();
-    const littleWhiteBook = new Book();
     littleBlackBook.id = '1254147';
-    littleWhiteBook.id = '8547859';
-    console.log(littleBlackBook.id);
-    console.log('this book was created at: ', littleBlackBook.dateCreated);
-    console.log('this book was created at: ', littleWhiteBook.dateCreated);
-    console.log('this book was created at: ', littleWhiteBook.multimedias);
+    littleBlackBook.title = 'Little Black Book';
+    littleBlackBook.id = '8547859';
+    return littleBlackBook;
+  }
+
+  onCreate(event): void {
+    console.log(event);
+    const activeModal = this.modalService.open(AddBookComponent, { size: 'lg', container: 'nb-layout' });
+
+    activeModal.componentInstance.modalHeader = 'Book Management - Add New Book';
+    const newBook = new Book;
+    newBook.title = 'New Book';
+  }
+
+  onEdit(event): void {
+    console.log(event);
   }
 
 }
