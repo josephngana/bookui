@@ -80,6 +80,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
         title: 'Subsections',
         link: '/bookui/admin/book-management/subsections',
       },
+      {
+        title: 'Multimedia',
+        link: '/bookui/admin/book-management/multimedia',
+      },
     ],
   },
   {

@@ -5,6 +5,7 @@ import {BooksComponent} from './books/books.component';
 import {ChaptersComponent} from './chapters/chapters.component';
 import {SectionsComponent} from './sections/sections.component';
 import {SubSectionsComponent} from './sub-sections/sub-sections.component';
+import {MultimediaComponent} from './multimedia/multimedia.component';
 
 const routes: Routes = [{
   path: '',
@@ -21,6 +22,9 @@ const routes: Routes = [{
   }, {
     path: 'subsections',
     component: SubSectionsComponent,
+  }, {
+    path: 'multimedia',
+    component: MultimediaComponent,
   }],
 }];
 

@@ -6,6 +6,7 @@ import {BooksModule} from './books/books.module';
 import {ChaptersModule} from './chapters/chapters.module';
 import {SectionsModule} from './sections/sections.module';
 import {SubSectionsModule} from './sub-sections/sub-sections.module';
+import {MultimediaModule} from './multimedia/multimedia.module';
 
 const components = [
   BookManagementComponent,
@@ -19,7 +20,11 @@ const components = [
     ChaptersModule,
     SectionsModule,
     SubSectionsModule,
+<<<<<<< HEAD
 
+=======
+    MultimediaModule,
+>>>>>>> bccf9fe7eb1064e1b18136b3c254dd38c90ec43e
   ],
   declarations: [
     ...components,
