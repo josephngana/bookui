@@ -31,6 +31,10 @@ export class SitesComponent implements OnInit {
         title: 'Site Description',
         type: 'string',
       },
+      dateCreated: {
+        title: 'Date Created',
+        type: 'string',
+      },
     },
   };
 
