@@ -20,11 +20,7 @@ const components = [
     ChaptersModule,
     SectionsModule,
     SubSectionsModule,
-<<<<<<< HEAD
-
-=======
     MultimediaModule,
->>>>>>> bccf9fe7eb1064e1b18136b3c254dd38c90ec43e
   ],
   declarations: [
     ...components,
