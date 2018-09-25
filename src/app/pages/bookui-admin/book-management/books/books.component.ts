@@ -14,6 +14,7 @@ import {LocalDataSource} from 'ng2-smart-table';
 export class BooksComponent implements OnInit {
 
   source: LocalDataSource;
+  books: Array<Book>;
 
   settings = {
     mode: 'external',
@@ -29,7 +30,6 @@ export class BooksComponent implements OnInit {
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
     },
     columns: {
       title: {
@@ -48,7 +48,7 @@ export class BooksComponent implements OnInit {
         title: 'ISBN',
         type: 'string',
       },
-      eIsbn: {
+      eisbn: {
         title: 'e-ISBN',
         type: 'string',
       },
@@ -75,9 +75,9 @@ export class BooksComponent implements OnInit {
   }
 
   ngOnInit() {
-    const books: Array<Book> = [];
-    books.push(this.doShow());
-    this.source = new LocalDataSource(books);
+    this.books = [];
+    this.books.push(this.doShow());
+    this.source = new LocalDataSource(this.books);
   }
 
   onDeleteConfirm(event): void {
@@ -94,16 +94,28 @@ export class BooksComponent implements OnInit {
     littleBlackBook.id = '1254147';
     littleBlackBook.title = 'Little Black Book';
     littleBlackBook.id = '8547859';
+    littleBlackBook.author = 'James Brown';
+    littleBlackBook.datePublished = new Date('2015-01-01');
+    littleBlackBook.eisbn = 'e-isbn-098485';
+    littleBlackBook.isbn = 'isbn-987542';
+    littleBlackBook.publisher = 'Brown Gordon';
     return littleBlackBook;
   }
 
   onCreate(event): void {
-    console.log(event);
     const activeModal = this.modalService.open(AddBookComponent, { size: 'lg', container: 'nb-layout' });
 
     activeModal.componentInstance.modalHeader = 'Book Management - Add New Book';
-    const newBook = new Book;
-    newBook.title = 'New Book';
+
+    activeModal.result.then(result => {
+      if (result) {
+        console.log(result);
+        this.books.push(result);
+        this.source.load(this.books);
+      }
+    }).catch(error => {
+      console.error(error);
+    });
   }
 
   onEdit(event): void {
