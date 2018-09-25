@@ -3,11 +3,11 @@ import {Chapter} from './chapter';
 import {Multimedia} from '../../../../shared/domain/multimedia';
 
 export class Book extends BookBase {
-  siteId: String;
-  isbn: String;
-  eisbn: String;
-  author: String;
-  published: String;
+  siteId: string;
+  isbn: string;
+  eisbn: string;
+  author: string;
+  publisher: string;
   datePublished: Date;
   chapters: Array<Chapter> = [];
 }

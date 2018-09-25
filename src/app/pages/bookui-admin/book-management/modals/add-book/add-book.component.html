@@ -4,9 +4,25 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body">
-  {{ content }}
-</div>
-<div class="modal-footer">
-  <button class="btn btn-md btn-primary" (click)="closeModal()">Save changes</button>
-</div>
+<form [formGroup]="addBookForm" novalidate (ngSubmit)="addBook(addBookForm.value, addBookForm.valid)">
+  <div class="modal-body">
+    <nb-card>
+      <!--<nb-card-header>Basic form</nb-card-header>-->
+      <nb-card-body>
+        <div class="form-group">
+          <label for="bookTitle">Book Title</label>
+          <input type="text" class="form-control" id="bookTitle" placeholder="Book Title"
+                 [formControl]="addBookForm.controls['bookTitle']">
+        </div>
+        <div class="form-group">
+          <label for="bookAuthor">Author</label>
+          <input type="text" class="form-control" id="bookAuthor" placeholder="Book Author"
+                 [formControl]="addBookForm.controls['bookAuthor']">
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-md btn-primary" >Save changes</button>
+  </div>
+</form>
