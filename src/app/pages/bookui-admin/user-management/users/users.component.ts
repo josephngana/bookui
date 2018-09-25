@@ -26,10 +26,6 @@ export class UsersComponent implements OnInit {
     columns: {
       siteName: {
         title: 'Site Name',
-        type: '',
-      },
-      firstName: {
-        title: 'First Name',
         filter: {
           type: 'list',
           config: {
@@ -41,6 +37,10 @@ export class UsersComponent implements OnInit {
             ],
           },
         },
+      },
+      firstName: {
+        title: 'First Name',
+        type: 'string',
       },
       lastName: {
         title: 'Last Name',
