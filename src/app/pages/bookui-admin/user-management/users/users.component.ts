@@ -54,9 +54,9 @@ export class UsersComponent implements OnInit {
         title: 'E-mail',
         type: 'string',
       },
-      password: {
-        title: 'Password',
-        type: 'password',
+      dateCreated: {
+        title: 'Date Created',
+        type: 'string',
       },
     },
   };
