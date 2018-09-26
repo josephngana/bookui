@@ -11,10 +11,15 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 export class AddBookComponent implements OnInit {
 
   private modalHeading: string;
+  private story: string;
 
   public addBookForm: FormGroup;
   public bookTitle: AbstractControl;
   public bookAuthor: AbstractControl;
+  public bookPublisher: AbstractControl;
+  public bookIsbn: AbstractControl;
+  public bookEisbn: AbstractControl;
+  public bookDatePublished: AbstractControl;
 
   constructor(private builder: FormBuilder, private activeModal: NgbActiveModal) {
   }
@@ -24,10 +29,18 @@ export class AddBookComponent implements OnInit {
     this.addBookForm = this.builder.group({
       'bookTitle': ['', Validators.required],
       'bookAuthor': ['', Validators.required],
+      'bookPublisher': ['', Validators.required],
+      'bookIsbn': ['', Validators.required],
+      'bookEisbn': ['', Validators.required],
+      'bookDatePublished': ['', Validators.required],
     });
 
     this.bookTitle = this.addBookForm.controls['bookTitle'];
     this.bookAuthor = this.addBookForm.controls['bookAuthor'];
+    this.bookPublisher = this.addBookForm.controls['bookPublisher'];
+    this.bookIsbn = this.addBookForm.controls['bookIsbn'];
+    this.bookEisbn = this.addBookForm.controls['bookEisbn'];
+    this.bookDatePublished = this.addBookForm.controls['bookEisbn'];
   }
 
   closeModal(): void {
@@ -38,11 +51,22 @@ export class AddBookComponent implements OnInit {
     if (isValid) {
       console.log(entity);
       const book = new Book();
+      book.story = entity.bookStory;
+      book.datePublished = entity.bookDatePublished;
+      book.eisbn = entity.bookEisbn;
+      book.isbn = entity.bookIsbn;
+      book.publisher = entity.bookPublisher;
       book.author = entity.bookAuthor;
       book.title = entity.bookTitle;
+      book.story = this.story;
       // call service to save book...if successful, call close with new book as below
+      console.log(book.story);
       this.activeModal.close(book);
     }
 
+  }
+
+  blabla(event): void {
+    this.story = event;
   }
 }

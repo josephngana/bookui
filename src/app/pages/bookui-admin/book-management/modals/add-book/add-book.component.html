@@ -15,9 +15,34 @@
                  [formControl]="addBookForm.controls['bookTitle']">
         </div>
         <div class="form-group">
-          <label for="bookAuthor">Author</label>
-          <input type="text" class="form-control" id="bookAuthor" placeholder="Book Author"
-                 [formControl]="addBookForm.controls['bookAuthor']">
+        <label for="bookAuthor">Author</label>
+        <input type="text" class="form-control" id="bookAuthor" placeholder="Book Author"
+               [formControl]="addBookForm.controls['bookAuthor']">
+      </div>
+        <div class="form-group">
+          <label for="bookPublisher">Publisher</label>
+          <input type="text" class="form-control" id="bookPublisher" placeholder="Book Publisher"
+                 [formControl]="addBookForm.controls['bookPublisher']">
+        </div>
+        <div class="form-group">
+          <label for="bookIsbn">ISBN</label>
+          <input type="text" class="form-control" id="bookIsbn" placeholder="Book ISBN"
+                 [formControl]="addBookForm.controls['bookIsbn']">
+        </div>
+        <div class="form-group">
+          <label for="bookEisbn">e-ISBN</label>
+          <input type="text" class="form-control" id="bookEisbn" placeholder="Book e-ISBN"
+                 [formControl]="addBookForm.controls['bookEisbn']">
+        </div>
+        <div class="form-group">
+          <label for="bookDatePublished">Date Published</label>
+          <input type="text" class="form-control" id="bookDatePublished" placeholder="Date Published"
+                 [formControl]="addBookForm.controls['bookDatePublished']">
+        </div>
+        <div class="form-group">
+          <label for="bookStory">Story</label>
+          <ngx-tiny-mce
+            (editorKeyup)="blabla($event)" id="bookStory" ></ngx-tiny-mce>
         </div>
       </nb-card-body>
     </nb-card>
