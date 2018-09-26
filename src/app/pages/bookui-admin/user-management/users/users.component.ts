@@ -26,16 +26,7 @@ export class UsersComponent implements OnInit {
     columns: {
       siteName: {
         title: 'Site Name',
-        filter: {
-          type: 'list',
-          config: {
-            selectText: 'Select...',
-            list: [
-              { value: 'Glenna Reichert', title: 'Glenna Reichert' },
-              { value: 'Kurtis Weissnat', title: 'Kurtis Weissnat' },
-              { value: 'Chelsey Dietrich', title: 'Chelsey Dietrich' },
-            ],
-          },
+        type: 'string'
         },
       },
       firstName: {
