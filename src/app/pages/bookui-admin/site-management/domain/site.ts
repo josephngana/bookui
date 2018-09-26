@@ -1,5 +1,6 @@
 export class Site {
-  id: String;
-  siteName: String;
-  siteDescription: String = '';
+  siteId: string;
+  siteName: string;
+  siteDescription: string = '';
+  dateCreated: Date = new Date();
 }

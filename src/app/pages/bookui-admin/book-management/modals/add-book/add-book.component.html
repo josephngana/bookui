@@ -1,0 +1,28 @@
+<div class="modal-header">
+  <span>{{ modalHeading }}</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form [formGroup]="addBookForm" novalidate (ngSubmit)="addBook(addBookForm.value, addBookForm.valid)">
+  <div class="modal-body">
+    <nb-card>
+      <!--<nb-card-header>Basic form</nb-card-header>-->
+      <nb-card-body>
+        <div class="form-group">
+          <label for="bookTitle">Book Title</label>
+          <input type="text" class="form-control" id="bookTitle" placeholder="Book Title"
+                 [formControl]="addBookForm.controls['bookTitle']">
+        </div>
+        <div class="form-group">
+          <label for="bookAuthor">Author</label>
+          <input type="text" class="form-control" id="bookAuthor" placeholder="Book Author"
+                 [formControl]="addBookForm.controls['bookAuthor']">
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-md btn-primary" >Save changes</button>
+  </div>
+</form>
