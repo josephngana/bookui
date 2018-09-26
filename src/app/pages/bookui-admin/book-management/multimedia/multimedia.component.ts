@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {Multimedia} from '../../../../shared/domain/multimedia';
 import {DatePipe} from '@angular/common';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-multimedia',
@@ -59,9 +60,10 @@ export class MultimediaComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log(AppUtil.getId());
     const mm: Array<Multimedia> = [];
     const multimedia = new Multimedia();
-    multimedia.multimediaId = '90980980';
+    multimedia.multimediaId = AppUtil.getId();
     multimedia.multimediaLink = 'http://google.com';
     multimedia.multimediaName = 'Chapter 1';
     multimedia.multimediaType = 'video';
@@ -82,7 +84,7 @@ export class MultimediaComponent implements OnInit {
     console.log(event);
     const newMultimedia = event.newData;
     const multimedia = new Multimedia();
-    multimedia.multimediaId = '089784343';
+    multimedia.multimediaId = AppUtil.getId();
     multimedia.multimediaType = newMultimedia.multimediaType;
     multimedia.multimediaName = newMultimedia.multimediaName;
     multimedia.multimediaLink = newMultimedia.multimediaLink;
