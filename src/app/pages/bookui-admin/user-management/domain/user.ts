@@ -1,10 +1,10 @@
 export class User {
-  siteId: String;
-  userId: String;
-  firstName: String;
-  middleName: String = '';
-  lastName: String;
-  email: String;
-  password: String;
+  siteId: string;
+  userId: string;
+  firstName: string;
+  middleName: string = '';
+  lastName: string;
+  email: string;
+  password: string;
   dateCreated: Date = new Date();
 }
