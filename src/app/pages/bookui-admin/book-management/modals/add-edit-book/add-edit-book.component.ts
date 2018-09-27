@@ -43,7 +43,7 @@ export class AddEditBookComponent implements OnInit {
     this.bookPublisher = this.addBookForm.controls['bookPublisher'];
     this.bookIsbn = this.addBookForm.controls['bookIsbn'];
     this.bookEisbn = this.addBookForm.controls['bookEisbn'];
-    this.bookDatePublished = this.addBookForm.controls['bookEisbn'];
+    this.bookDatePublished = this.addBookForm.controls['bookDatePublished'];
     this.bookDescription = this.addBookForm.controls['bookDescription'];
     this.bookStory = this.addBookForm.controls['bookStory'];
 
