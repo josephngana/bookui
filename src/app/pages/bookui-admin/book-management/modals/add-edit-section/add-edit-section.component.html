@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <span>{{ header }}</span>
+  <button class="close" aria-label="Close" (click)="closeModal()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form [formGroup]="addSectionForm" novalidate (ngSubmit)="addSection(addSectionForm.value, addSectionForm.valid)">
+  <div class="modal-body">
+    <nb-card>
+      <!--<nb-card-header>Basic form</nb-card-header>-->
+      <nb-card-body>
+        <div class="form-group">
+          <label for="sectionTitle">Section Title</label>
+          <input type="text" class="form-control" id="sectionTitle" placeholder="Book Title"
+                 [formControl]="addSectionForm.controls['sectionTitle']" >
+        </div>
+        <div class="form-group">
+          <label for="sectionDescription">Section Description</label>
+          <input type="text" class="form-control" id="sectionDescription" placeholder="Section Description"
+                 [formControl]="addSectionForm.controls['sectionDescription']">
+        </div>
+        <div class="form-group">
+          <label for="sectionStory">Story</label>
+          <ngx-tiny-mce type="textarea" [formControl]="addSectionForm.controls['sectionStory']"
+                        id="sectionStory" (editorChange)="onEditorChange($event)" ngDefaultControl></ngx-tiny-mce>
+        </div>
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-md btn-primary" >Save changes</button>
+  </div>
+</form>
