@@ -87,6 +87,21 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ],
   },
   {
+    title: 'PERSONAL',
+    group: true,
+  },
+  {
+    title: 'My Profile',
+    icon: 'nb-locked',
+    link: '/bookui/my-profile',
+    // children: [
+    //   {
+    //     title: 'Roles',
+    //     link: '/bookui/admin/role-management/roles',
+    //   },
+    // ],
+  },
+  {
     title: 'FEATURES',
     group: true,
   },

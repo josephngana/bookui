@@ -21,8 +21,14 @@
           <div class="col-sm-6">
             <div class="form-group">
               <label for="bookDatePublished">Date Published</label>
-              <input type="text" class="form-control" id="bookDatePublished" placeholder="Date Published"
-                     [formControl]="addBookForm.controls['bookDatePublished']">
+              <div class="input-group">
+                <button class="input-group-addon" (click)="d.toggle()" type="button">
+                  <img src="../../../../../../assets/images/calendar-interface-symbol-tool.svg">
+                </button>
+                <input type="text" #d="ngbDatepicker" class="form-control" id="bookDatePublished"
+                       placeholder="yyyy-mm-dd" readonly [maxDate]="setMaxDate()"
+                       [formControl]="addBookForm.controls['bookDatePublished']" ngbDatepicker>
+              </div>
             </div>
           </div>
         </div>
@@ -69,7 +75,7 @@
         <div class="form-group">
           <label for="bookStory">Story</label>
           <ngx-tiny-mce type="textarea" [formControl]="addBookForm.controls['bookStory']"
-                        id="bookStory" ngDefaultControl></ngx-tiny-mce>
+                        id="bookStory" (editorChange)="onEditorChange($event)" ngDefaultControl></ngx-tiny-mce>
         </div>
       </nb-card-body>
     </nb-card>
