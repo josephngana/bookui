@@ -15,7 +15,8 @@
             <div class="form-group">
               <label for="bookTitle">Book Title</label>
               <input type="text" class="form-control" id="bookTitle" placeholder="Book Title"
-                     [formControl]="addBookForm.controls['bookTitle']" >
+                     [formControl]="addBookForm.controls['bookTitle']"
+                     [ngClass]="bookTitle.valid ? '' : 'form-control-danger'" >
             </div>
           </div>
           <div class="col-sm-6">
@@ -27,7 +28,8 @@
                 </button>
                 <input type="text" #d="ngbDatepicker" class="form-control" id="bookDatePublished"
                        placeholder="yyyy-mm-dd" readonly [maxDate]="setMaxDate()"
-                       [formControl]="addBookForm.controls['bookDatePublished']" ngbDatepicker>
+                       [formControl]="addBookForm.controls['bookDatePublished']"
+                       [ngClass]="bookDatePublished.valid ? '' : 'form-control-danger'" ngbDatepicker>
               </div>
             </div>
           </div>
@@ -38,14 +40,16 @@
             <div class="form-group">
               <label for="bookAuthor">Author</label>
               <input type="text" class="form-control" id="bookAuthor" placeholder="Book Author"
-                     [formControl]="addBookForm.controls['bookAuthor']">
+                     [formControl]="addBookForm.controls['bookAuthor']"
+                     [ngClass]="bookAuthor.valid ? '' : 'form-control-danger'" >
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="bookPublisher">Publisher</label>
               <input type="text" class="form-control" id="bookPublisher" placeholder="Book Publisher"
-                     [formControl]="addBookForm.controls['bookPublisher']">
+                     [formControl]="addBookForm.controls['bookPublisher']"
+                     [ngClass]="bookPublisher.valid ? '' : 'form-control-danger'" >
             </div>
           </div>
         </div>
@@ -55,14 +59,16 @@
             <div class="form-group">
               <label for="bookIsbn">ISBN</label>
               <input type="text" class="form-control" id="bookIsbn" placeholder="Book ISBN"
-                     [formControl]="addBookForm.controls['bookIsbn']">
+                     [formControl]="addBookForm.controls['bookIsbn']"
+                     [ngClass]="bookIsbn.valid ? '' : 'form-control-danger'" >
             </div>
           </div>
           <div class="col-sm-6">
             <div class="form-group">
               <label for="bookEisbn">e-ISBN</label>
               <input type="text" class="form-control" id="bookEisbn" placeholder="Book e-ISBN"
-                     [formControl]="addBookForm.controls['bookEisbn']">
+                     [formControl]="addBookForm.controls['bookEisbn']"
+                     [ngClass]="bookEisbn.valid ? '' : 'form-control-danger'" >
             </div>
           </div>
         </div>
