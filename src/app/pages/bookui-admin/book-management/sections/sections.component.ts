@@ -1,17 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {DatePipe} from '@angular/common';
+import {Section} from '../domain/section';
+import {AddEditSectionComponent} from '../modals/add-edit-section/add-edit-section.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+
+
 
 @Component({
   selector: 'ngx-sections',
   templateUrl: './sections.component.html',
   styleUrls: ['./sections.component.scss'],
+  providers: [NgbModal],
 })
 export class SectionsComponent implements OnInit {
 
+  sections: Array<Section>;
   source: LocalDataSource;
   settings = {
-    noDataMessage: 'No sections added.',
+    mode: 'external',
+    noDataMessage: 'No sections.',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -42,7 +50,7 @@ export class SectionsComponent implements OnInit {
         addable: false,
         editable: false,
         valuePrepareFunction: (date) => {
-          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+          return new DatePipe('en-EN').transform(date, 'yyyy-MM-dd');
         },
       },
     },
@@ -51,9 +59,55 @@ export class SectionsComponent implements OnInit {
     },
   };
 
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
+    this.sections = [];
+    this.source = new LocalDataSource(this.sections);
+  }
+
+  onDeleteConfirm(event): void {
+    if (window.confirm('Are you sure you want to delete?')) {
+      event.confirm.resolve();
+    } else {
+      event.confirm.reject();
+    }
+  }
+
+  onCreate(event): void {
+    const modalHeader = 'Book Management - Add New Section';
+    const editSection: Section = null;
+    console.info('Adding new section...');
+    this.processAddEditSection(modalHeader, editSection);
+  }
+
+  onEdit(event): void {
+    const modalHeader = 'Book Management - Edit Section';
+    const editSection = event.data;
+    console.info('Editing section...');
+    this.processAddEditSection(modalHeader, editSection);
+  }
+
+  processAddEditSection(modalHeader: string, section: Section) {
+    const activeModal = this.modalService.open(AddEditSectionComponent, { size: 'lg', container: 'nb-layout' });
+
+    activeModal.componentInstance.header = modalHeader;
+    activeModal.componentInstance.editSection = section;
+
+    activeModal.result.then(result => {
+      if (result) {
+        console.log(result);
+        if (section) {
+          const sectionId = section.id;
+          const filteredSections = this.sections.filter( b => b.id !== sectionId);
+          this.sections = filteredSections;
+        }
+        this.sections.push(result);
+        this.source.load(this.sections);
+      }
+    }).catch(error => {
+      console.error(error);
+    });
   }
 
 }

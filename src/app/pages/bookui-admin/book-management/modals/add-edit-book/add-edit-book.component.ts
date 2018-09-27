@@ -61,7 +61,6 @@ export class AddEditBookComponent implements OnInit {
     if (isValid) {
       console.log(entity.bookStory, entity);
       const book = new Book();
-      book.story = entity.bookStory;
       book.datePublished = this.formatToDate(entity.bookDatePublished);
       book.eisbn = entity.bookEisbn;
       book.isbn = entity.bookIsbn;
