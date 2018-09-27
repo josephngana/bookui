@@ -56,7 +56,7 @@ export class BooksComponent implements OnInit {
         title: 'Date Published',
         type: 'string',
         valuePrepareFunction: (date) => {
-          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+          return new DatePipe('en-EN').transform(date, 'yyyy-MM-dd');
         },
       },
       dateCreated: {
@@ -65,7 +65,7 @@ export class BooksComponent implements OnInit {
         addable: false,
         editable: false,
         valuePrepareFunction: (date) => {
-          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+          return new DatePipe('en-EN').transform(date, 'yyyy-MM-dd');
         },
       },
     },

@@ -7,6 +7,7 @@ import { Component, OnDestroy, AfterViewInit, Output, EventEmitter, ElementRef }
 export class TinyMCEComponent implements OnDestroy, AfterViewInit {
 
   @Output() editorKeyup = new EventEmitter<any>();
+  @Output() editorChange = new EventEmitter<any>();
 
   editor: any;
 
@@ -21,6 +22,9 @@ export class TinyMCEComponent implements OnDestroy, AfterViewInit {
         this.editor = editor;
         editor.on('keyup', () => {
           this.editorKeyup.emit(editor.getContent());
+        });
+        editor.on('Change', () => {
+          this.editorChange.emit(editor.getContent());
         });
       },
       height: '320',
