@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Book} from '../domain/book';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {AddBookComponent} from '../modals/add-book/add-book.component';
+import {AddEditBookComponent} from '../modals/add-edit-book/add-edit-book.component';
 import {DatePipe} from '@angular/common';
 import {LocalDataSource} from 'ng2-smart-table';
 
@@ -103,23 +103,39 @@ export class BooksComponent implements OnInit {
   }
 
   onCreate(event): void {
-    const activeModal = this.modalService.open(AddBookComponent, { size: 'lg', container: 'nb-layout' });
+    const modalHeader = 'Book Management - Add New Book';
+    const editBook: Book = null;
+    console.info('Adding new book...');
+    this.processAddEditBook(modalHeader, editBook);
+  }
 
-    activeModal.componentInstance.modalHeader = 'Book Management - Add New Book';
+  onEdit(event): void {
+    const modalHeader = 'Book Management - Edit Book';
+    const editBook = event.data;
+    console.info('Editing book...');
+    this.processAddEditBook(modalHeader, editBook);
+  }
+
+  processAddEditBook(modalHeader: string, book: Book) {
+    const activeModal = this.modalService.open(AddEditBookComponent, { size: 'lg', container: 'nb-layout' });
+
+    activeModal.componentInstance.header = modalHeader;
+    activeModal.componentInstance.editBook = book;
 
     activeModal.result.then(result => {
       if (result) {
         console.log(result);
+        if (book) {
+          const bookId = book.id;
+          const filteredBooks = this.books.filter( b => b.id !== bookId);
+          this.books = filteredBooks;
+        }
         this.books.push(result);
         this.source.load(this.books);
       }
     }).catch(error => {
       console.error(error);
     });
-  }
-
-  onEdit(event): void {
-    console.log(event);
   }
 
 }
