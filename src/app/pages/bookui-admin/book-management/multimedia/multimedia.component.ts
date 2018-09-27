@@ -13,7 +13,7 @@ export class MultimediaComponent implements OnInit {
 
   source: LocalDataSource;
   settings = {
-    noDataMessage: 'No multimedia added.',
+    noDataMessage: 'No multimedia found.',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -24,6 +24,7 @@ export class MultimediaComponent implements OnInit {
       editButtonContent: '<i class="nb-edit"></i>',
       saveButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true,
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
@@ -89,6 +90,13 @@ export class MultimediaComponent implements OnInit {
     multimedia.multimediaName = newMultimedia.multimediaName;
     multimedia.multimediaLink = newMultimedia.multimediaLink;
     event.confirm.resolve(multimedia);
+  }
+
+  onEditConfirm(event): void {
+    console.log(event);
+    const editedMultimedia = event.newData;
+    // call service to edit/update multimedia here...
+    event.confirm.resolve(editedMultimedia);
   }
 
 
