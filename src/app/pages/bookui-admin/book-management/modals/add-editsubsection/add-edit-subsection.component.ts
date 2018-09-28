@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ngx-add-edit-sub-section',
-  templateUrl: './add-edit-sub-section.component.html',
+  templateUrl: './add-edit-subsection.component.html',
   styleUrls: ['./add-edit-sub-section.component.scss'],
 })
-export class AddEditSubSectionComponent implements OnInit {
+export class AddEditSubsectionComponent implements OnInit {
 
   constructor() { }
 
