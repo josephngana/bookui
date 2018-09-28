@@ -8,10 +8,12 @@ import {SectionsModule} from './sections/sections.module';
 import {SubSectionsModule} from './sub-sections/sub-sections.module';
 import {MultimediaModule} from './multimedia/multimedia.module';
 import {AddEditBookComponent} from './modals/add-edit-book/add-edit-book.component';
+import {AddEditSectionComponent} from './modals/add-edit-section/add-edit-section.component';
 
 const components = [
   BookManagementComponent,
   AddEditBookComponent,
+  AddEditSectionComponent,
 ];
 
 @NgModule({
@@ -29,6 +31,7 @@ const components = [
   ],
   entryComponents: [
     AddEditBookComponent,
+    AddEditSectionComponent,
   ],
 })
 export class BookManagementModule { }
