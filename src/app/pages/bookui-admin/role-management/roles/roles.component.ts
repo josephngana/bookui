@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Role} from '../domain/role';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-roles',
@@ -12,6 +14,7 @@ export class RolesComponent implements OnInit {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true,
     },
     edit: {
       editButtonContent: '<i class="nb-edit"></i>',
@@ -45,6 +48,33 @@ export class RolesComponent implements OnInit {
     } else {
       event.confirm.reject();
     }
+  }
+
+  /**
+   * handle the create action
+   * @param event
+   */
+  onCreateConfirm(event): void {
+    const newRole = event.newData;
+    const role = new Role();
+    role.id = AppUtil.getId();
+    role.roleDescription = newRole.roleDescription;
+    role.roleName = newRole.roleName;
+    /**
+     * call service to add role.
+     * if successful, call the resolve else call the reject
+     */
+    event.confirm.resolve(role);
+  }
+
+  /**
+   * handle editing a role
+   * @param event
+   */
+  onEditConfirm(event): void {
+    const editedRole = event.newData;
+    // call service to save edited role
+    event.confirm.resolve(editedRole);
   }
 
 }
