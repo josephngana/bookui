@@ -66,11 +66,13 @@ export class SectionsComponent implements OnInit {
     this.source = new LocalDataSource(this.sections);
   }
 
-  onDeleteConfirm(event): void {
+  onDelete(event): void {
+    const section = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
+      const sectionId = section.id;
+      const filteredSections = this.sections.filter( b => b.id !== sectionId);
+      this.sections = filteredSections;
+      this.source.load(this.sections);
     }
   }
 
