@@ -80,11 +80,13 @@ export class BooksComponent implements OnInit {
     this.source = new LocalDataSource(this.books);
   }
 
-  onDeleteConfirm(event): void {
+  onDelete(event): void {
+    const book = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
+      const bookId = book.id;
+      const filteredBooks = this.books.filter( b => b.id !== bookId);
+      this.books = filteredBooks;
+      this.source.load(this.books);
     }
   }
 
