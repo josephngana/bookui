@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {LocalDataSource} from 'ng2-smart-table';
+import {Book} from '../domain/book';
 
 @Component({
   selector: 'ngx-chapters',
@@ -7,7 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChaptersComponent implements OnInit {
 
+  source: LocalDataSource;
+  books: Array<Book>;
+
   settings = {
+    mode: 'external',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
