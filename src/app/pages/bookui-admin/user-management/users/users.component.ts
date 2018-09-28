@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import {LocalDataSource} from 'ng2-smart-table';
 import {User} from '../domain/user';
+import {DatePipe} from '@angular/common';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-users',
@@ -8,6 +11,7 @@ import {User} from '../domain/user';
 })
 export class UsersComponent implements OnInit {
 
+source: LocalDataSource;
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -26,7 +30,16 @@ export class UsersComponent implements OnInit {
     columns: {
       siteName: {
         title: 'Site Name',
-        type: 'string'
+        filter: {
+          type: 'list',
+          config: {
+            selectText: 'Select...',
+            list: [
+              { value: '', title: '' },
+              { value: '', title: '' },
+              { value: '', title: '' },
+            ],
+          },
         },
       },
       firstName: {
@@ -37,7 +50,7 @@ export class UsersComponent implements OnInit {
         title: 'Last Name',
         type: 'string',
       },
-      username: {
+      middleName: {
         title: 'Username',
         type: 'string',
       },
@@ -48,20 +61,56 @@ export class UsersComponent implements OnInit {
       dateCreated: {
         title: 'Date Created',
         type: 'string',
+        addable: false,
+        editable: false,
+        valuePrepareFunction: (date) => {
+          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+        },
       },
     },
   };
 
-  constructor() {
-    this.doShow();
-  }
+  constructor() { }
 
   ngOnInit() {
+    const ur: Array<User> = [];
+    const user = new User();
+    user.userId = AppUtil.getId();
+    user.firstName = '';
+    user.siteId = '';
+    user.lastName = '';
+    user.middleName = '';
+    user.email = '';
+    ur.push(user);
+
+    this.source = new LocalDataSource(ur);
   }
 
-  doShow() {
-    const u: User = new User();
-    console.log(u.dateCreated);
+  onCreateConfirm(event): void {
+    console.log(event);
+    const newUser = event.newData;
+    const user = new User();
+    user.userId = AppUtil.getId();
+    user.firstName = newUser.firstName;
+    user.siteId = newUser.siteId;
+    user.email = newUser.email;
+    user.lastName = newUser.lastName;
+    user.middleName = newUser.middleName;
+    event.confirm.resolve(user);
   }
 
+  onDeleteConfirm(event): void {
+    if (window.confirm('Are you sure you want to delete?')) {
+      event.confirm.resolve();
+    } else {
+      event.confirm.reject();
+    }
+  }
+
+  onEditConfirm(event): void {
+    console.log(event);
+    const editedMultimedia = event.newData;
+    // call service to edit/update multimedia here...
+    event.confirm.resolve(editedMultimedia);
+  }
 }
