@@ -64,7 +64,7 @@ export class UsersComponent implements OnInit {
         addable: false,
         editable: false,
         valuePrepareFunction: (date) => {
-          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy HH:mm:ss');
+          return new DatePipe('en-EN').transform(date, 'dd MMM yyyy');
         },
       },
     },
