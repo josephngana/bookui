@@ -11,7 +11,7 @@ import {AppUtil} from '../../../../conf/app-util';
 })
 export class UsersComponent implements OnInit {
 
-source: LocalDataSource;
+  source: LocalDataSource;
   settings = {
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -35,9 +35,9 @@ source: LocalDataSource;
           config: {
             selectText: 'Select...',
             list: [
-              { value: '', title: '' },
-              { value: '', title: '' },
-              { value: '', title: '' },
+              { value: 'JohnDoe', title: 'Editor' },
+              { value: 'JaneDoe', title: 'Admin' },
+              { value: 'DaveDoe', title: 'Moderator' },
             ],
           },
         },
@@ -76,11 +76,10 @@ source: LocalDataSource;
     const ur: Array<User> = [];
     const user = new User();
     user.userId = AppUtil.getId();
-    user.firstName = '';
-    user.siteId = '';
-    user.lastName = '';
-    user.middleName = '';
-    user.email = '';
+    user.firstName = 'John';
+    user.lastName = 'Doe';
+    user.middleName = 'JohnDoe';
+    user.email = 'JohnDoe@gmail.com';
     ur.push(user);
 
     this.source = new LocalDataSource(ur);
@@ -109,8 +108,8 @@ source: LocalDataSource;
 
   onEditConfirm(event): void {
     console.log(event);
-    const editedMultimedia = event.newData;
-    // call service to edit/update multimedia here...
-    event.confirm.resolve(editedMultimedia);
+    const editedUser = event.newData;
+    // call service to edit/update user here...
+    event.confirm.resolve(editedUser);
   }
 }
