@@ -1,8 +1,17 @@
+/**
+ * @author: caniksea
+ * @date: September 27, 2018.
+ */
+
 import { Component, OnInit } from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {Multimedia} from '../../../../shared/domain/multimedia';
 import {DatePipe} from '@angular/common';
 import {AppUtil} from '../../../../conf/app-util';
+import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
+import {ToasterUtils} from '../../../../conf/util';
+
+import 'style-loader!angular2-toaster/toaster.css';
 
 @Component({
   selector: 'ngx-multimedia',
@@ -11,7 +20,22 @@ import {AppUtil} from '../../../../conf/app-util';
 })
 export class MultimediaComponent implements OnInit {
 
+  loading: boolean;
   source: LocalDataSource;
+  private toasterService: ToasterService;
+
+  // toaster configuration
+  public toasterConfig: ToasterConfig = new ToasterConfig({
+      positionClass: ToasterUtils.POSITION_CLASS,
+      timeout: ToasterUtils.TIMEOUT,
+      newestOnTop: ToasterUtils.NEWEST_ON_TOP,
+      tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
+      preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
+      animation: ToasterUtils.ANIMATION_TYPE.fade,
+      limit: ToasterUtils.LIMIT,
+    });
+
+  // settings for smart table
   settings = {
     noDataMessage: 'No multimedia found.',
     add: {
@@ -58,10 +82,12 @@ export class MultimediaComponent implements OnInit {
     },
   };
 
-  constructor() { }
+  constructor(toasterService: ToasterService) {
+    this.toasterService = toasterService;
+  }
 
   ngOnInit() {
-    console.log(AppUtil.getId());
+    this.loading = false;
     const mm: Array<Multimedia> = [];
     const multimedia = new Multimedia();
     multimedia.multimediaId = AppUtil.getId();
@@ -73,6 +99,10 @@ export class MultimediaComponent implements OnInit {
     this.source = new LocalDataSource(mm);
   }
 
+  /**
+   * Handles delete of multimedia
+   * @param event: object
+   */
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       event.confirm.resolve();
@@ -81,22 +111,57 @@ export class MultimediaComponent implements OnInit {
     }
   }
 
+  /**
+   * Handles creation of new multimedia
+   * @param event: object
+   */
   onCreateConfirm(event): void {
-    console.log(event);
-    const newMultimedia = event.newData;
-    const multimedia = new Multimedia();
-    multimedia.multimediaId = AppUtil.getId();
-    multimedia.multimediaType = newMultimedia.multimediaType;
-    multimedia.multimediaName = newMultimedia.multimediaName;
-    multimedia.multimediaLink = newMultimedia.multimediaLink;
-    event.confirm.resolve(multimedia);
+    this.loading = true;
+    setTimeout(() => {
+      const newMultimedia = event.newData;
+      const multimedia = new Multimedia();
+      multimedia.multimediaId = AppUtil.getId();
+      multimedia.multimediaType = newMultimedia.multimediaType;
+      multimedia.multimediaName = newMultimedia.multimediaName;
+      multimedia.multimediaLink = newMultimedia.multimediaLink;
+      event.confirm.resolve(multimedia);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Multimedia', 'Multimedia Added');
+    }, 3000);
   }
 
+  /**
+   * Handles editing a multimedia
+   * @param event: object
+   */
   onEditConfirm(event): void {
-    console.log(event);
-    const editedMultimedia = event.newData;
-    // call service to edit/update multimedia here...
-    event.confirm.resolve(editedMultimedia);
+    this.loading = true;
+    setTimeout(() => {
+      const editedMultimedia = event.newData;
+      // call service to edit/update multimedia here...
+      event.confirm.resolve(editedMultimedia);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Multimedia', 'Multimedia updated');
+    }, 3000);
+  }
+
+  /**
+   * Shows toast on screen
+   * @param type: string
+   * @param title: string
+   * @param info: string
+   */
+  private showInformation(type: string, title: string, info: string): void {
+    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
+    const toast: Toast = {
+      type: type,
+      title: title,
+      body: info,
+      timeout: ToasterUtils.TIMEOUT,
+      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
   }
 
 
