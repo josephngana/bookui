@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {Chapter} from '../domain/chapter';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AppUtil} from '../../../../conf/app-util';
+import {DatePipe} from '@angular/common';
 import {AddEditChapterComponent} from '../modals/add-edit-chapter/add-edit-chapter.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'ngx-chapters',
@@ -13,7 +15,7 @@ import {AddEditChapterComponent} from '../modals/add-edit-chapter/add-edit-chapt
 export class ChaptersComponent implements OnInit {
 
   source: LocalDataSource;
-  books: Array<Chapter>;
+  chapters: Array<Chapter>;
 
   settings = {
     mode: 'external',
@@ -32,17 +34,22 @@ export class ChaptersComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      chapter: {
-        title: 'Chapter',
+      title: {
+        title: 'Title',
         type: 'string',
       },
-      author: {
-        title: 'Author',
+      description: {
+        title: 'Description',
         type: 'string',
       },
-      date: {
-        title: 'Date',
-        type: 'date',
+      dateCreated: {
+        title: 'Date Created',
+        type: 'string',
+        addable: false,
+        editable: false,
+        valuePrepareFunction: (date) => {
+          return new DatePipe('en-EN').transform(date, 'yyyy-MM-dd');
+        },
       },
     },
   };
@@ -50,15 +57,23 @@ export class ChaptersComponent implements OnInit {
   constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.chapter = [];
-    this.source = new LocalDataSource(this.chapter);
+    this.chapters = [];
+    const chapter = new Chapter();
+    chapter.id = AppUtil.getId();
+    chapter.title = 'Emergency';
+    chapter.description = 'This is for emergencies';
+    this.chapters.push(chapter);
+
+    this.source = new LocalDataSource(this.chapters);
   }
 
-  onDeleteConfirm(event): void {
+  onDelete(event): void {
+    const chapter = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
-    } else {
-      event.confirm.reject();
+      const chapterId = chapter.id;
+      const filteredChapters = this.chapters.filter(c => c.id !== chapterId);
+      this.chapters = filteredChapters;
+      this.source.load(this.chapters);
     }
   }
 
@@ -69,32 +84,31 @@ export class ChaptersComponent implements OnInit {
     this.processAddEditChapter(modalHeader, editChapter);
   }
 
-  onEdit(event): void {
-    const modalHeader = 'Book Management - Edit Chapter';
-    const editChapter = event.data;
-    console.info('Editing chapter...');
-    this.processAddEditChapter(modalHeader, editChapter);
-  }
-
-  processAddEditChapter(modalHeader: string, chapter: Chapter) {
+  private processAddEditChapter(header: string, chapter: Chapter): void {
     const activeModal = this.modalService.open(AddEditChapterComponent, { size: 'lg', container: 'nb-layout' });
 
-    activeModal.componentInstance.header = modalHeader;
-    activeModal.componentInstance.editSection = chapter;
+    activeModal.componentInstance.header = header;
+    activeModal.componentInstance.editChapter = chapter;
 
     activeModal.result.then(result => {
       if (result) {
-        console.log(result);
         if (chapter) {
           const chapterId = chapter.id;
-          const filteredChapter = this.chapter.filter( b => b.id !== chapterId);
-          this.chapter = filteredChapter;
+          const filteredChapters = this.chapters.filter( b => b.id !== chapterId);
+          this.chapters = filteredChapters;
         }
-        this.chapter.push(result);
-        this.source.load(this.chapter);
+        this.chapters.push(result);
+        this.source.load(this.chapters);
       }
     }).catch(error => {
       console.error(error);
     });
+  }
+
+  onEdit(event): void {
+    const chapter = event.data;
+    const heading = 'Book Management - Edit Chapter';
+    console.info('Editing chapter...');
+    this.processAddEditChapter(heading, chapter);
   }
 }

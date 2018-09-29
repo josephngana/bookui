@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Chapter} from '../../domain/chapter';
+import {AppUtil} from '../../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-add-edit-chapter',
@@ -9,6 +10,7 @@ import {Chapter} from '../../domain/chapter';
   styleUrls: ['./add-edit-chapter.component.scss'],
 })
 export class AddEditChapterComponent implements OnInit {
+
   @Input() editChapter: Chapter;
   @Input() header: string;
 
@@ -43,13 +45,12 @@ export class AddEditChapterComponent implements OnInit {
 
   addChapter(entity, isValid: boolean): void {
     if (isValid) {
-      console.log(entity.chapterStory, entity);
       const chapter = new Chapter();
+      chapter.id = AppUtil.getId();
       chapter.title = entity.chapterTitle;
       chapter.description = entity.chapterDescription;
       chapter.story = entity.chapterStory;
       // call service to save book...if successful, call close with new book as below
-      console.log(chapter.story);
       this.activeModal.close(chapter);
     }
 
