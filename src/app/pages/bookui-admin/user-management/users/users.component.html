@@ -1,9 +1,13 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
     <nb-card-header>
       User Management - Users
     </nb-card-header>
     <nb-card-body>
-        <ng2-smart-table [settings]="settings" (deleteConfirm)="onDeleteConfirm($event)">
+        <ng2-smart-table [settings]="settings" [source]="source"
+                         (createConfirm)="onCreateConfirm($event)" (editConfirm)="onEditConfirm($event)"
+                         (deleteConfirm)="onDeleteConfirm($event)">
         </ng2-smart-table>
     </nb-card-body>
 </nb-card>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>

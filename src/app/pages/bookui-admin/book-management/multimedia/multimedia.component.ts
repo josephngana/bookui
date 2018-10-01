@@ -78,7 +78,7 @@ export class MultimediaComponent implements OnInit {
       },
     },
     pager: {
-      perPage: 5,
+      perPage: 10,
     },
   };
 
