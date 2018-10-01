@@ -1,3 +1,8 @@
 nb-card {
     transform: translate3d(0, 0, 0);
 }
+
+:host /deep/ table-cell-default-editor select-editor select {
+  height: calc(2rem + 3px) !important;
+  padding: 0 10px !important;
+}
