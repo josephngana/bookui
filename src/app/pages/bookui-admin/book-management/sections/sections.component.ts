@@ -87,7 +87,7 @@ export class SectionsComponent implements OnInit {
     const modalHeader = 'Book Management - Edit Section';
     const editSection = event.data;
     console.info('Editing section...');
-    this.processAddEditSection(modalHeader, editSection);
+     this.processAddEditSection(modalHeader, editSection);
   }
 
   processAddEditSection(modalHeader: string, section: Section) {
