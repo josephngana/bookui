@@ -1,3 +1,4 @@
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
 <nb-card class="inline-form-card">
   <nb-card-header>Book Management - Sub-Sections</nb-card-header>
   <nb-card-body>
@@ -23,7 +24,7 @@
         </select>
       </div>
       <div class="input-group full-width">
-        <label class="input-group-addon">Sections</label>
+        <label class="input-group-addon">Section</label>
         <select class="form-control">
           <option>Minsk</option>
           <option>Gomel</option>
@@ -39,13 +40,13 @@
 
 <nb-card>
   <nb-card-header>
-    SubSections for {{ chapter }} in {{ book }} in {{ section }}
+    Subsections for {{ section }} in {{ chapter }} in {{ book }}
   </nb-card-header>
 
   <nb-card-body>
     <ng2-smart-table [settings]="settings" [source]="source"
                      (create)="onCreate($event)"
-
+                     (edit)="onEdit($event)"
                      (delete)="onDelete($event)">
     </ng2-smart-table>
   </nb-card-body>

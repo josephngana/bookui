@@ -18,6 +18,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   providers: [NgbModal],
 })
 export class SubSectionsComponent implements OnInit {
+loading: boolean;
 subsections: Array<SubSection>;
 source: LocalDataSource;
   settings = {
@@ -35,18 +36,17 @@ source: LocalDataSource;
     },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
-      confirmDelete: true,
     },
     columns: {
-      subSection: {
-        title: 'Sub-section',
+      title: {
+        title: 'Title',
         type: 'string',
       },
-      author: {
-        title: 'Author',
+      description: {
+        title: 'Description',
         type: 'string',
       },
-      date: {
+      dateCreated: {
         title: 'Date Created',
         type: 'string',
         addable: false,
@@ -75,7 +75,7 @@ source: LocalDataSource;
   }
 
   onCreate(event): void {
-    const modalHeader = 'Book Management - Add New SubSection';
+    const modalHeader = 'Book Management - Add New Subsection';
     const editSubSection: SubSection = null;
     console.info('Adding new subsections...');
     this.processAddEditSubSection(modalHeader, editSubSection);
