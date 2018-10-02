@@ -52,6 +52,9 @@ export class ChaptersComponent implements OnInit {
         },
       },
     },
+    pager: {
+      perPage: 10,
+    },
   };
 
   constructor(private modalService: NgbModal) { }

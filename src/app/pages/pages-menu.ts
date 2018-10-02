@@ -23,85 +23,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/bookui/iot-dashboard',
   },
   {
-    title: 'ADMINISTRATION',
-    group: true,
-  },
-  {
-    title: 'Role Management',
-    icon: 'nb-flame-circled',
-    link: '/bookui/admin/role-management',
-    children: [
-      {
-        title: 'Roles',
-        link: '/bookui/admin/role-management/roles',
-      },
-    ],
-  },
-  {
-    title: 'User Management',
-    icon: 'nb-gear',
-    link: '/bookui/admin/user-management',
-    children: [
-      {
-        title: 'Users',
-        link: '/bookui/admin/user-management/users',
-      },
-    ],
-  },
-  {
-    title: 'Site Management',
-    icon: 'nb-shuffle',
-    link: '/bookui/admin/site-management',
-    children: [
-      {
-        title: 'Sites',
-        link: '/bookui/admin/site-management/sites',
-      },
-    ],
-  },
-  {
-    title: 'Book Management',
-    icon: 'nb-star',
-    link: '/bookui/admin/book-management',
-    children: [
-      {
-        title: 'Books',
-        link: '/bookui/admin/book-management/books',
-      },
-      {
-        title: 'Chapters',
-        link: '/bookui/admin/book-management/chapters',
-      },
-      {
-        title: 'Sections',
-        link: '/bookui/admin/book-management/sections',
-      },
-      {
-        title: 'Subsections',
-        link: '/bookui/admin/book-management/subsections',
-      },
-      {
-        title: 'Multimedia',
-        link: '/bookui/admin/book-management/multimedia',
-      },
-    ],
-  },
-  {
-    title: 'PERSONAL',
-    group: true,
-  },
-  {
-    title: 'My Profile',
-    icon: 'nb-locked',
-    link: '/bookui/my-profile',
-    // children: [
-    //   {
-    //     title: 'Roles',
-    //     link: '/bookui/admin/role-management/roles',
-    //   },
-    // ],
-  },
-  {
     title: 'FEATURES',
     group: true,
   },
@@ -242,28 +163,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: '404',
         link: '/bookui/miscellaneous/404',
-      },
-    ],
-  },
-  {
-    title: 'Auth',
-    icon: 'nb-locked',
-    children: [
-      {
-        title: 'Login',
-        link: '/auth/login',
-      },
-      {
-        title: 'Register',
-        link: '/auth/register',
-      },
-      {
-        title: 'Request Password',
-        link: '/auth/request-password',
-      },
-      {
-        title: 'Reset Password',
-        link: '/auth/reset-password',
       },
     ],
   },
