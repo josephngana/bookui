@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * Author: caniksea.
+ * Last Modified: 2018/09/26 10:51 AM
+ */
+
 import { Component, OnInit } from '@angular/core';
 
 @Component({
