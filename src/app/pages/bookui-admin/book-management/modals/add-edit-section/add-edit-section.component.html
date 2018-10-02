@@ -11,8 +11,9 @@
       <nb-card-body>
         <div class="form-group">
           <label for="sectionTitle">Section Title</label>
-          <input type="text" class="form-control" id="sectionTitle" placeholder="Book Title"
-                 [formControl]="addSectionForm.controls['sectionTitle']" >
+          <input type="text" class="form-control" id="sectionTitle" placeholder="Section Title"
+                 [formControl]="addSectionForm.controls['sectionTitle']"
+                 [ngClass]="sectionTitle.valid ? '' : 'form-control-danger'" >
         </div>
         <div class="form-group">
           <label for="sectionDescription">Section Description</label>
