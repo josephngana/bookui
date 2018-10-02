@@ -17,9 +17,9 @@ export class UsersComponent implements OnInit {
   readonly domain: string = 'User';
   loading: boolean;
   source: LocalDataSource;
-  users: Array<User>;
+  users: User[];
   sites: Array<Site>;
-  dropdownData: Array<any>;
+  dropdownData: object[];
 
   private toasterService: ToasterService;
 

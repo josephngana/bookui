@@ -55,7 +55,7 @@ export class SectionsComponent implements OnInit {
       },
     },
     pager: {
-      perPage: 5,
+      perPage: 10,
     },
   };
 
