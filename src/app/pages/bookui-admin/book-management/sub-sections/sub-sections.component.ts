@@ -4,12 +4,14 @@
  * Last Modified: 2018/09/26 10:51 AM
  */
 
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {DatePipe} from '@angular/common';
 import {SubSection} from '../domain/sub-section';
 import {AddEditSubsectionComponent} from '../modals/add-edit-subsection/add-edit-subsection.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
+import {ToasterUtils} from '../../../../conf/util';
 
 @Component({
   selector: 'ngx-sub-sections',
@@ -21,6 +23,17 @@ export class SubSectionsComponent implements OnInit {
 loading: boolean;
 subsections: Array<SubSection>;
 source: LocalDataSource;
+private toasterService: ToasterService;
+// toaster configuration
+  public toasterConfig: ToasterConfig = new ToasterConfig({
+    positionClass: ToasterUtils.POSITION_CLASS,
+    timeout: ToasterUtils.TIMEOUT,
+    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
+    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
+    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
+    animation: ToasterUtils.ANIMATION_TYPE.fade,
+    limit: ToasterUtils.LIMIT,
+  });
   settings = {
     mode: 'external',
     noDataMessage: 'No subsections.',
@@ -58,7 +71,9 @@ source: LocalDataSource;
     },
   };
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, toasterService: ToasterService) {
+    this.toasterService = this.toasterService;
+  }
 
   ngOnInit() {
     this.subsections = [];
@@ -105,5 +120,18 @@ source: LocalDataSource;
       console.error(error);
     });
   }
+  private showInformation(type: string, title: string, info: string): void {
+    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
+    const toast: Toast = {
+      type: type,
+      title: title,
+      body: info,
+      timeout: ToasterUtils.TIMEOUT,
+      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
+  }
+
 
 }
