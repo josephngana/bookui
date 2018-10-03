@@ -1,3 +1,6 @@
+
+export const SERVICE_BASE_URL = 'http://155.238.32.101:9000/';
+
 export class ToasterUtils {
   // Toaster config
   static readonly POSITION_CLASS = 'toast-top-right';

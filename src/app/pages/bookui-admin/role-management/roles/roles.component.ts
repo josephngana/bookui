@@ -4,11 +4,13 @@ import {AppUtil} from '../../../../conf/app-util';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {LocalDataSource} from 'ng2-smart-table';
 import {ToasterUtils} from '../../../../conf/util';
+import {RoleService} from '../service/role.service';
 
 @Component({
   selector: 'ngx-roles',
   templateUrl: './roles.component.html',
   styleUrls: ['./roles.component.scss'],
+  providers: [RoleService],
 })
 export class RolesComponent implements OnInit {
 
@@ -50,20 +52,33 @@ export class RolesComponent implements OnInit {
         title: 'Role Name',
         type: 'string',
       },
-      roleDescription: {
+      description: {
         title: 'Role Description',
         type: 'string',
       },
     },
   };
 
-  constructor(toasterService: ToasterService) {
+  constructor(toasterService: ToasterService, private roleService: RoleService) {
     this.toasterService = toasterService;
   }
 
   ngOnInit() {
     this.roles = [];
+    this.getRoles();
     this.source = new LocalDataSource(this.roles);
+  }
+
+  private getRoles(): void {
+    this.loading = true;
+    this.roleService.getRoles().subscribe( (roles: Role[]) => {
+      if (roles) {
+        console.log(roles);
+        roles.forEach(r => this.roles.push(r));
+        this.source.refresh();
+        this.loading = false;
+      }
+    });
   }
 
   onDeleteConfirm(event): void {
@@ -89,19 +104,17 @@ export class RolesComponent implements OnInit {
       this.showInformation(toastType, 'Role', message);
     } else {
       this.loading = true;
-      setTimeout(() => {
-        const role = new Role();
-        role.id = AppUtil.getId();
-        role.roleDescription = newRole.roleDescription;
-        role.roleName = newRole.roleName;
-        /**
-         * call service to add role.
-         * if successful, call the resolve else call the reject
-         */
-        event.confirm.resolve(role);
-        this.loading = false;
-        this.showInformation(toastType, 'Role', message);
-      }, 3000);
+      const role = new Role();
+      role.id = AppUtil.getId();
+      role.roleDescription = newRole.roleDescription;
+      role.roleName = newRole.roleName;
+      this.roleService.addRole(role).subscribe(savedRole => {
+        if (savedRole) {
+          event.confirm.resolve(savedRole);
+          this.loading = false;
+          this.showInformation(toastType, 'Role', message);
+        }
+      });
     }
   }
 
