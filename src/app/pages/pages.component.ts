@@ -145,11 +145,11 @@ export class PagesComponent implements OnInit {
   private populateAuthMenu(): NbMenuItem {
     const authSubs = [];
     if (!this.isLoggedIn) {
-      const loginSub = {title: 'Login', link: '/auth/login'};
+      const loginSub = {title: 'Login', link: '/bookui/auth/login'};
       authSubs.push(loginSub);
     } else {
-      const resetPassSub = {title: 'Reset Password', link: '/auth/reset-password'};
-      const logoutSub = {title: 'Logout', link: '/auth/logout'};
+      const resetPassSub = {title: 'Reset Password', link: '/bookui/auth/reset-password'};
+      const logoutSub = {title: 'Logout', link: '/bookui/auth/logout'};
       authSubs.push(resetPassSub);
       authSubs.push(logoutSub);
     }
