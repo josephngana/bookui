@@ -1,37 +1,63 @@
+/*
+ * Copyright (c) 2018.
+ * Author: caniksea.
+ * Last Modified: 2018/10/03 3:51 PM
+ */
+
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Role} from '../domain/role';
 import {Observable} from 'rxjs';
 import {SERVICE_BASE_URL} from '../../../../conf/util';
 import {AppUtil} from '../../../../conf/app-util';
-import {catchError, map, tap} from 'rxjs/operators';
+import {catchError, timeout} from 'rxjs/operators';
+import {ErrorHandlerService, HandleError} from '../../../../shared/service/error-handler.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RoleService {
 
-  constructor(private http: HttpClient) { }
+  roleUrl = SERVICE_BASE_URL + 'roles/';
+  private handleError: HandleError;
 
-  public addRole(role: Role): Observable<Role> {
-    const url = SERVICE_BASE_URL + 'roles/create';
-    const body = JSON.stringify(role);
-    return this.http.post<Role>(url, role, AppUtil.getHttpHeaders())
-      .pipe();
+  constructor(private http: HttpClient,
+              httpErrorHandler: ErrorHandlerService) {
+    this.handleError = httpErrorHandler.createHandleError('RoleService');
   }
 
+  /**
+   * Add role
+   * @param role
+   */
+  addRole(role: Role): Observable<Role> {
+    const url = this.roleUrl + 'create';
+    // const body = JSON.stringify(role);
+    return this.http.post<Role>(url, role, AppUtil.getHttpHeaders())
+      .pipe(
+        catchError(this.handleError('addRole', role)),
+      );
+  }
+
+  /**
+   * Get roles
+   */
   getRoles(): Observable<Role[]> {
-    const url = SERVICE_BASE_URL + 'roles/getall';
-    console.log("calling: ", url);
+    const url = this.roleUrl + 'getall';
     return this.http.get<Role[]>(url).pipe(
+      catchError(this.handleError('getRoles', [])),
+      timeout(10000),
     );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof  ErrorEvent) {
-
-    } else {
-      console.error(`Error Code: ${error.status}, Error: ${error.error}`);
-    }
+  /**
+   * delete role
+   * @param role
+   */
+  deleteRole(role: Role): Observable<Role> {
+    const url = this.roleUrl + 'delete';
+    return this.http.post<Role>(url, role, AppUtil.getHttpHeaders()).pipe(
+      catchError(this.handleError('deleteRole', role)),
+    );
   }
 }
