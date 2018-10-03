@@ -71,19 +71,43 @@ export class RolesComponent implements OnInit {
 
   private getRoles(): void {
     this.loading = true;
-    this.roleService.getRoles().subscribe( (roles: Role[]) => {
-      if (roles) {
-        console.log(roles);
-        roles.forEach(r => this.roles.push(r));
-        this.source.refresh();
+    this.roleService.getRoles().subscribe((roles: Role[]) => {
+        if (roles) {
+          this.roles = roles;
+          this.source.refresh();
+          // this.loading = false;
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', 'No roles retrieved.');
+        }
+      },
+      error => {
         this.loading = false;
-      }
-    });
+        console.error('Error fetching roles', error.message);
+      },
+      () => {
+        this.loading = false;
+      });
   }
 
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
-      event.confirm.resolve();
+      this.loading = true;
+      this.roleService.deleteRole(event.data).subscribe(role => {
+          if (role) {
+            event.confirm.resolve();
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Role', 'Role deleted!');
+          } else {
+            event.confirm.reject();
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', 'Role NOT deleted!');
+          }
+        },
+        error => {
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Role', 'An error occurred: ' + error.message);
+        },
+        () => {
+          this.loading = false;
+        });
     } else {
       event.confirm.reject();
     }
@@ -95,13 +119,11 @@ export class RolesComponent implements OnInit {
    */
   onCreateConfirm(event): void {
     let message = 'Role added';
-    let toastType = ToasterUtils.TOAST_TYPE.success;
     const newRole = event.newData;
     if (newRole.roleName === '') {
       event.confirm.reject();
       message = 'Role name is required';
-      toastType = ToasterUtils.TOAST_TYPE.info;
-      this.showInformation(toastType, 'Role', message);
+      this.showInformation(ToasterUtils.TOAST_TYPE.info, 'Role', message);
     } else {
       this.loading = true;
       const role = new Role();
@@ -109,12 +131,21 @@ export class RolesComponent implements OnInit {
       role.roleDescription = newRole.roleDescription;
       role.roleName = newRole.roleName;
       this.roleService.addRole(role).subscribe(savedRole => {
-        if (savedRole) {
-          event.confirm.resolve(savedRole);
+          if (savedRole) {
+            event.confirm.resolve(savedRole);
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Role', message);
+          } else {
+            message = 'Role NOT saved!';
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', message);
+          }
+        },
+        error => {
           this.loading = false;
-          this.showInformation(toastType, 'Role', message);
-        }
-      });
+          console.error('Error saving role: ', error.message);
+        },
+        () => {
+          this.loading = false;
+        });
     }
   }
 
@@ -124,24 +155,31 @@ export class RolesComponent implements OnInit {
    */
   onEditConfirm(event): void {
     let message = 'Role updated';
-    let toastType = ToasterUtils.TOAST_TYPE.success;
     const editedRole = event.newData;
     if (editedRole.roleName === '') {
       event.confirm.reject();
       message = 'Role name is required';
-      toastType = ToasterUtils.TOAST_TYPE.info;
-      this.showInformation(toastType, 'Role', message);
+      this.showInformation(ToasterUtils.TOAST_TYPE.info, 'Role', message);
     } else {
       this.loading = true;
-      setTimeout(() => {
-        /**
-         * call service to edit role.
-         * if successful, call the resolve else call the reject
-         */
-        event.confirm.resolve(editedRole);
-        this.loading = false;
-        this.showInformation(toastType, 'Role', message);
-      }, 2000);
+      this.roleService.addRole(editedRole).subscribe(role => {
+          if (role) {
+            event.confirm.resolve(role);
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Role', message);
+          } else {
+            event.confirm.reject();
+            message = 'Role NOT updated!';
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', message);
+          }
+        },
+        error => {
+          this.loading = false;
+          message = 'An error occurred: ' + error.message;
+          this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Role', message);
+        },
+        () => {
+          this.loading = false;
+        });
     }
   }
 
