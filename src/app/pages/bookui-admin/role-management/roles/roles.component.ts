@@ -52,7 +52,7 @@ export class RolesComponent implements OnInit {
         title: 'Role Name',
         type: 'string',
       },
-      roleDescription: {
+      description: {
         title: 'Role Description',
         type: 'string',
       },
