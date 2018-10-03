@@ -4,6 +4,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddEditBookComponent} from '../modals/add-edit-book/add-edit-book.component';
 import {DatePipe} from '@angular/common';
 import {LocalDataSource} from 'ng2-smart-table';
+import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
+import {ToasterUtils} from '../../../../conf/util';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-books',
@@ -12,10 +15,22 @@ import {LocalDataSource} from 'ng2-smart-table';
   providers: [NgbModal],
 })
 export class BooksComponent implements OnInit {
-
+  loading: boolean;
   source: LocalDataSource;
   books: Array<Book>;
+  private toasterService: ToasterService;
 
+  // toaster configuration
+  public toasterConfig: ToasterConfig = new ToasterConfig({
+    positionClass: ToasterUtils.POSITION_CLASS,
+    timeout: ToasterUtils.TIMEOUT,
+    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
+    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
+    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
+    animation: ToasterUtils.ANIMATION_TYPE.fade,
+    limit: ToasterUtils.LIMIT,
+  });
+// settings for smart table
   settings = {
     mode: 'external',
     add: {
@@ -71,7 +86,8 @@ export class BooksComponent implements OnInit {
     },
   };
 
-  constructor(private modalService: NgbModal) {
+  constructor(private modalService: NgbModal, toasterService: ToasterService) {
+    this.toasterService = toasterService;
   }
 
   ngOnInit() {
@@ -80,6 +96,10 @@ export class BooksComponent implements OnInit {
     this.source = new LocalDataSource(this.books);
   }
 
+  /**
+   * Handles the delete action
+   * @param event: object
+   */
   onDelete(event): void {
     const book = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
@@ -103,19 +123,63 @@ export class BooksComponent implements OnInit {
     littleBlackBook.publisher = 'Brown Gordon';
     return littleBlackBook;
   }
-
+  /**
+   * Handles the create action of new book
+   * @param event: object
+   */
   onCreate(event): void {
     const modalHeader = 'Book Management - Add New Book';
     const editBook: Book = null;
     console.info('Adding new book...');
     this.processAddEditBook(modalHeader, editBook);
+    this.loading = true;
+    setTimeout(() => {
+      const newBook = event.newData;
+      const book = new Book();
+      book.id = AppUtil.getId();
+      book.title = newBook.title;
+      book.description = newBook.description;
+      event.confirm.resolve(book);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Added');
+    }, 3000);
   }
 
+  /**
+   * Shows toast on screen
+   * @param type: string
+   * @param title: string
+   * @param info: string
+   */
+  private showInformation(type: string, title: string, info: string): void {
+    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
+    const toast: Toast = {
+      type: type,
+      title: title,
+      body: info,
+      timeout: ToasterUtils.TIMEOUT,
+      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
+  }
+  /**
+   * Handles the edit action of an existing book
+   * @param event: object
+   */
   onEdit(event): void {
     const modalHeader = 'Book Management - Edit Book';
     const editBook = event.data;
     console.info('Editing book...');
     this.processAddEditBook(modalHeader, editBook);
+    this.loading = true;
+    setTimeout(() => {
+      const editedBook = event.newData;
+      // call service to edit/update multimedia here...
+      event.confirm.resolve(editedBook);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book updated');
+    }, 3000);
   }
 
   processAddEditBook(modalHeader: string, book: Book) {
