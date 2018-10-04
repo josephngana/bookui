@@ -10,12 +10,14 @@ import {MultimediaModule} from './multimedia/multimedia.module';
 import {AddEditBookComponent} from './modals/add-edit-book/add-edit-book.component';
 import {AddEditSectionComponent} from './modals/add-edit-section/add-edit-section.component';
 import {AddEditChapterComponent} from './modals/add-edit-chapter/add-edit-chapter.component';
+import {AddEditSubsectionComponent} from './modals/add-edit-subsection/add-edit-subsection.component';
 
 const components = [
   BookManagementComponent,
   AddEditBookComponent,
   AddEditSectionComponent,
   AddEditChapterComponent,
+  AddEditSubsectionComponent,
 ];
 
 @NgModule({
@@ -35,6 +37,7 @@ const components = [
     AddEditBookComponent,
     AddEditSectionComponent,
     AddEditChapterComponent,
+    AddEditSubsectionComponent,
   ],
 })
 export class BookManagementModule { }
