@@ -4,6 +4,8 @@ import {DatePipe} from '@angular/common';
 import {Section} from '../domain/section';
 import {AddEditSectionComponent} from '../modals/add-edit-section/add-edit-section.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ToasterUtils} from '../../../../conf/util';
+import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 
 
 
@@ -14,9 +16,21 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
   providers: [NgbModal],
 })
 export class SectionsComponent implements OnInit {
-
+  loading: boolean;
   sections: Array<Section>;
   source: LocalDataSource;
+  private toasterService: ToasterService;
+
+  // toaster configuration
+  public toasterConfig: ToasterConfig = new ToasterConfig({
+    positionClass: ToasterUtils.POSITION_CLASS,
+    timeout: ToasterUtils.TIMEOUT,
+    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
+    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
+    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
+    animation: ToasterUtils.ANIMATION_TYPE.fade,
+    limit: ToasterUtils.LIMIT,
+  });
   settings = {
     mode: 'external',
     noDataMessage: 'No sections.',
@@ -59,23 +73,36 @@ export class SectionsComponent implements OnInit {
     },
   };
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, toasterService: ToasterService) {
+    this.toasterService = toasterService;
+  }
 
   ngOnInit() {
     this.sections = [];
     this.source = new LocalDataSource(this.sections);
   }
-
+  /**
+   * Handles the delete action
+   * @param event: object
+   */
   onDelete(event): void {
     const section = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
+      this.loading = true;
+      setTimeout(() => {
       const sectionId = section.id;
       const filteredSections = this.sections.filter( b => b.id !== sectionId);
       this.sections = filteredSections;
       this.source.load(this.sections);
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Section', 'Section Deleted');
+      }, 2000);
     }
   }
-
+  /**
+   * Handles the create action of new section
+   * @param event: object
+   */
   onCreate(event): void {
     const modalHeader = 'Book Management - Add New Section';
     const editSection: Section = null;
@@ -96,9 +123,19 @@ export class SectionsComponent implements OnInit {
     activeModal.componentInstance.header = modalHeader;
     activeModal.componentInstance.editSection = section;
 
+    let message = 'Section added!';
+
+    if (!section) {
+
+    } else {
+      message = 'Section updated!';
+    }
+
     activeModal.result.then(result => {
       if (result) {
         console.log(result);
+        this.loading = true;
+        setTimeout(() => {
         if (section) {
           const sectionId = section.id;
           const filteredSections = this.sections.filter( b => b.id !== sectionId);
@@ -106,10 +143,32 @@ export class SectionsComponent implements OnInit {
         }
         this.sections.push(result);
         this.source.load(this.sections);
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Sections', message);
+        }, 2000);
       }
     }).catch(error => {
       console.error(error);
     });
+  }
+
+  /**
+   * Shows toast on screen
+   * @param type: string
+   * @param title: string
+   * @param info: string
+   */
+  private showInformation(type: string, title: string, info: string): void {
+    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
+    const toast: Toast = {
+      type: type,
+      title: title,
+      body: info,
+      timeout: ToasterUtils.TIMEOUT,
+      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
+      bodyOutputType: BodyOutputType.TrustedHtml,
+    };
+    this.toasterService.popAsync(toast);
   }
 
 }
