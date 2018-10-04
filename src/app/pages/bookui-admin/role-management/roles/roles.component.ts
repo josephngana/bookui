@@ -74,7 +74,7 @@ export class RolesComponent implements OnInit {
     this.roleService.getRoles().subscribe((roles: Role[]) => {
         if (roles) {
           this.roles = roles;
-          this.source.refresh();
+          this.source = new LocalDataSource(this.roles);
           // this.loading = false;
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', 'No roles retrieved.');
@@ -82,7 +82,8 @@ export class RolesComponent implements OnInit {
       },
       error => {
         this.loading = false;
-        console.error('Error fetching roles', error.message);
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Role', 'Error fetching roles: ' + error.message);
+        console.error('Error fetching roles:' + error.message);
       },
       () => {
         this.loading = false;
@@ -128,7 +129,7 @@ export class RolesComponent implements OnInit {
       this.loading = true;
       const role = new Role();
       role.id = AppUtil.getId();
-      role.roleDescription = newRole.roleDescription;
+      role.description = newRole.description;
       role.roleName = newRole.roleName;
       this.roleService.addRole(role).subscribe(savedRole => {
           if (savedRole) {
