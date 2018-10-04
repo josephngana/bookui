@@ -162,7 +162,7 @@ export class RolesComponent implements OnInit {
       this.showInformation(ToasterUtils.TOAST_TYPE.info, 'Role', message);
     } else {
       this.loading = true;
-      this.roleService.addRole(editedRole).subscribe(role => {
+      this.roleService.updateRole(editedRole).subscribe(role => {
           if (role) {
             event.confirm.resolve(role);
             this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Role', message);
