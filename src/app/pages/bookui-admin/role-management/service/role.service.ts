@@ -60,4 +60,15 @@ export class RoleService {
       catchError(this.handleError('deleteRole', role)),
     );
   }
+
+  /**
+   * update a role
+   * @param role
+   */
+  updateRole(role: Role): Observable<Role> {
+    const url = this.roleUrl + 'update';
+    return this.http.post<Role>(url, role, AppUtil.getHttpHeaders()).pipe(
+      catchError(this.handleError('updateRole', role)),
+    );
+  }
 }
