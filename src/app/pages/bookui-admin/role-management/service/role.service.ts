@@ -35,7 +35,7 @@ export class RoleService {
     // const body = JSON.stringify(role);
     return this.http.post<Role>(url, role, AppUtil.getHttpHeaders())
       .pipe(
-        catchError(this.handleError('addRole', role)),
+        // catchError(this.handleError('addRole', role)),
       );
   }
 
@@ -45,8 +45,8 @@ export class RoleService {
   getRoles(): Observable<Role[]> {
     const url = this.roleUrl + 'getall';
     return this.http.get<Role[]>(url).pipe(
-      catchError(this.handleError('getRoles', [])),
       timeout(10000),
+      // catchError(this.handleError('getRoles', [])),
     );
   }
 
@@ -57,7 +57,7 @@ export class RoleService {
   deleteRole(role: Role): Observable<Role> {
     const url = this.roleUrl + 'delete';
     return this.http.post<Role>(url, role, AppUtil.getHttpHeaders()).pipe(
-      catchError(this.handleError('deleteRole', role)),
+      // catchError(this.handleError('deleteRole', role)),
     );
   }
 
@@ -68,7 +68,8 @@ export class RoleService {
   updateRole(role: Role): Observable<Role> {
     const url = this.roleUrl + 'update';
     return this.http.post<Role>(url, role, AppUtil.getHttpHeaders()).pipe(
-      catchError(this.handleError('updateRole', role)),
+      timeout(10000),
+      // catchError(this.handleError('updateRole', role)),
     );
   }
 }
