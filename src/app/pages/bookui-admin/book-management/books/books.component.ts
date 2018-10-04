@@ -103,10 +103,15 @@ export class BooksComponent implements OnInit {
   onDelete(event): void {
     const book = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
+      this.loading = true;
+      setTimeout(() => {
       const bookId = book.id;
       const filteredBooks = this.books.filter( b => b.id !== bookId);
       this.books = filteredBooks;
       this.source.load(this.books);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Deleted');
+    }, 2000);
     }
   }
 
