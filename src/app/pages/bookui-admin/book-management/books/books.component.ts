@@ -132,17 +132,51 @@ export class BooksComponent implements OnInit {
     const editBook: Book = null;
     console.info('Adding new book...');
     this.processAddEditBook(modalHeader, editBook);
-    this.loading = true;
-    setTimeout(() => {
-      const newBook = event.newData;
-      const book = new Book();
-      book.id = AppUtil.getId();
-      book.title = newBook.title;
-      book.description = newBook.description;
-      event.confirm.resolve(book);
-      this.loading = false;
-      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Added');
-    }, 3000);
+  }
+  /**
+   * Handles the edit action of an existing book
+   * @param event: object
+   */
+  onEdit(event): void {
+    const modalHeader = 'Book Management - Edit Book';
+    const editBook = event.data;
+    console.info('Editing book...');
+    this.processAddEditBook(modalHeader, editBook);
+  }
+
+  processAddEditBook(modalHeader: string, book: Book): void {
+    const activeModal = this.modalService.open(AddEditBookComponent, { size: 'lg', container: 'nb-layout' });
+
+    activeModal.componentInstance.header = modalHeader;
+    activeModal.componentInstance.editBook = book;
+
+    let message = 'Book added!';
+
+    if (!book) {
+
+    } else {
+      message = 'Book updated!';
+    }
+
+    activeModal.result.then(result => {
+      if (result) {
+        console.log(result);
+        this.loading = true;
+        setTimeout(() => {
+          if (book) {
+            const bookId = book.id;
+            const filteredBooks = this.books.filter( b => b.id !== bookId);
+            this.books = filteredBooks;
+          }
+          this.books.push(result);
+          this.source.load(this.books);
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', message);
+          }, 2000);
+      }
+    }).catch(error => {
+      console.error(error);
+    });
   }
 
   /**
@@ -162,46 +196,6 @@ export class BooksComponent implements OnInit {
       bodyOutputType: BodyOutputType.TrustedHtml,
     };
     this.toasterService.popAsync(toast);
-  }
-  /**
-   * Handles the edit action of an existing book
-   * @param event: object
-   */
-  onEdit(event): void {
-    const modalHeader = 'Book Management - Edit Book';
-    const editBook = event.data;
-    console.info('Editing book...');
-    this.processAddEditBook(modalHeader, editBook);
-    this.loading = true;
-    setTimeout(() => {
-      const editedBook = event.newData;
-      // call service to edit/update multimedia here...
-      event.confirm.resolve(editedBook);
-      this.loading = false;
-      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book updated');
-    }, 3000);
-  }
-
-  processAddEditBook(modalHeader: string, book: Book) {
-    const activeModal = this.modalService.open(AddEditBookComponent, { size: 'lg', container: 'nb-layout' });
-
-    activeModal.componentInstance.header = modalHeader;
-    activeModal.componentInstance.editBook = book;
-
-    activeModal.result.then(result => {
-      if (result) {
-        console.log(result);
-        if (book) {
-          const bookId = book.id;
-          const filteredBooks = this.books.filter( b => b.id !== bookId);
-          this.books = filteredBooks;
-        }
-        this.books.push(result);
-        this.source.load(this.books);
-      }
-    }).catch(error => {
-      console.error(error);
-    });
   }
 
 }
