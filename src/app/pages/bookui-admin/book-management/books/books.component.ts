@@ -6,7 +6,6 @@ import {DatePipe} from '@angular/common';
 import {LocalDataSource} from 'ng2-smart-table';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
-import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-books',
