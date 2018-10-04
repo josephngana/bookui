@@ -12,7 +12,8 @@
         <div class="form-group">
           <label for="chapterTitle">Chapter Title</label>
           <input type="text" class="form-control" id="chapterTitle" placeholder="Chapter Title"
-                 [formControl]="addChapterForm.controls['chapterTitle']" >
+                 [formControl]="addChapterForm.controls['chapterTitle']"
+                 [ngClass]="chapterTitle.valid ? '' : 'form-control-danger'" >
         </div>
         <div class="form-group">
           <label for="chapterDescription">Chapter Description</label>
@@ -21,8 +22,8 @@
         </div>
         <div class="form-group">
           <label for="chapterStory">Story</label>
-          <ngx-tiny-mce [formControl]="addChapterForm.controls['chapterStory']"
-                        id="chapterStory" ngDefaultControl></ngx-tiny-mce>
+          <ngx-tiny-mce type="textarea" [formControl]="addChapterForm.controls['chapterStory']"
+                        id="chapterStory" (editorChange)="onEditorChange($event)" ngDefaultControl></ngx-tiny-mce>
         </div>
       </nb-card-body>
     </nb-card>

@@ -89,7 +89,7 @@ private toasterService: ToasterService;
       this.subsections = filteredSubSections;
       this.source.load(this.subsections);
         this.loading = false;
-        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Subsection', 'Subsection Deleted');
+        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Subsection', 'subsection deleted!');
       }, 2000);
     }
   }
@@ -111,10 +111,10 @@ private toasterService: ToasterService;
     activeModal.componentInstance.header = modalheader;
     activeModal.componentInstance.editSubSection = subsection;
 
-    let message = 'Subsection added!';
+    let message = 'subsection added!';
     if (!subsection) {
     } else {
-      message = 'Subsection updated!';
+      message = 'subsection updated!';
     }
     activeModal.result.then(result => {
       if (result) {
