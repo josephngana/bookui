@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
   <nb-card-header>
     Site Management - Sites
   </nb-card-header>
@@ -11,5 +11,7 @@
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
+
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
 
 
