@@ -6,11 +6,13 @@ import {DatePipe} from '@angular/common';
 import {Site} from '../../site-management/domain/site';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
+import {SiteService} from '../../site-management/service/site.service';
 
 @Component({
   selector: 'ngx-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  providers: [SiteService],
 })
 export class UsersComponent implements OnInit {
 
@@ -95,30 +97,46 @@ export class UsersComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService) {
+  constructor(toasterService: ToasterService,
+              private siteService: SiteService,
+              ) {
     this.toasterService = toasterService;
   }
 
   ngOnInit() {
-    this.sites = [];
-    let site = this.makeSite('The Little Black Book');
-    this.sites.push(site);
-    site = this.makeSite('The Yahoos!');
-    this.sites.push(site);
+    this.getSites();
+  }
 
-    this.dropdownData = [];
-    this.sites.forEach(s => {
-      this.dropdownData.push({
-        value: s.siteId,
-        title: s.siteName,
+  private getSites(): void {
+    this.loading = true;
+    this.siteService.getSites().subscribe(sites => {
+        console.log(sites);
+        if (sites) {
+          this.sites = sites;
+          this.dropdownData = [];
+          this.sites.forEach(s => {
+            this.dropdownData.push({
+              value: s.siteId,
+              title: s.siteName,
+            });
+          });
+          this.settings.columns.siteName.editor.config.list = this.dropdownData;
+
+          console.log(this.settings.columns.siteName.editor.config.list);
+
+          this.users = [];
+          this.source = new LocalDataSource(this.users);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'User', 'Could not retrieve sites!');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'User', 'An error occurred: ' + error.message);
+      },
+      () => {
+        this.loading = false;
       });
-    });
-
-    this.settings.columns.siteName.editor.config.list = this.dropdownData;
-    // this.settings = Object.assign({}, this.settings);
-
-    this.users = [];
-    this.source = new LocalDataSource(this.users);
   }
 
   private getSiteName(id: string): string {

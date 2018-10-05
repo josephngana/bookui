@@ -6,12 +6,13 @@ import {DatePipe} from '@angular/common';
 import {LocalDataSource} from 'ng2-smart-table';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
+import {SiteService} from '../../site-management/service/site.service';
 
 @Component({
   selector: 'ngx-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
-  providers: [NgbModal],
+  providers: [NgbModal, SiteService],
 })
 export class BooksComponent implements OnInit {
   loading: boolean;
@@ -85,7 +86,10 @@ export class BooksComponent implements OnInit {
     },
   };
 
-  constructor(private modalService: NgbModal, toasterService: ToasterService) {
+  constructor(private modalService: NgbModal,
+              toasterService: ToasterService,
+              private siteService: SiteService,
+  ) {
     this.toasterService = toasterService;
   }
 
