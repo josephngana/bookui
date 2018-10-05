@@ -27,6 +27,9 @@ const routes: Routes = [{
     path: 'admin',
     loadChildren: './bookui-admin/bookui-admin.module#BookuiAdminModule',
   }, {
+    path: 'auth',
+    loadChildren: './auth/auth.module#AuthModule',
+  }, {
     path: 'ui-features',
     loadChildren: './ui-features/ui-features.module#UiFeaturesModule',
   }, {
