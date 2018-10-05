@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Site} from '../domain/site';
+import {LocalDataSource} from 'ng2-smart-table';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'ngx-sites',
@@ -6,8 +9,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sites.component.scss'],
 })
 export class SitesComponent implements OnInit {
-
+  sites: Site[];
+  source: LocalDataSource;
   settings = {
+    noDataMessage: 'No users',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -34,13 +39,39 @@ export class SitesComponent implements OnInit {
       dateCreated: {
         title: 'Date Created',
         type: 'string',
+        editable: false,
+        addable: false,
+        valuePrepareFunction: (date) => {
+          return new DatePipe('en-En').transform(date, 'YYYY-MM-DD');
+        },
       },
     },
   };
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
+  onDeleteConfirm(event): void {
+    if (window.confirm('Are you sure you want to delete?')) {
+      // call service to delete user.
+      event.confirm.resolve();
+    } else {
+      event.confirm.reject();
+    }
+
+  }
+
+  onCreateConfirm(event): void {
+    const newSite = event.newData;
+    const siteId = newSite.siteId;
+    const siteName = newSite.siteName;
+  }
+  onEditConfirm(event): void {
+    const newSite = event.newData;
+    const siteId = newSite.siteId;
+    const siteName = newSite.siteName;
+  }
 }
