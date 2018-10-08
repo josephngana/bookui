@@ -7,12 +7,13 @@ import {LocalDataSource} from 'ng2-smart-table';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
 import {SiteService} from '../../site-management/service/site.service';
+import {BookService} from '../services/book.service';
 
 @Component({
   selector: 'ngx-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
-  providers: [NgbModal, SiteService],
+  providers: [NgbModal, SiteService, BookService],
 })
 export class BooksComponent implements OnInit {
   loading: boolean;
@@ -89,14 +90,39 @@ export class BooksComponent implements OnInit {
   constructor(private modalService: NgbModal,
               toasterService: ToasterService,
               private siteService: SiteService,
+              private bookService: BookService,
   ) {
     this.toasterService = toasterService;
   }
 
   ngOnInit() {
     this.books = [];
+    this.getBooks();
     this.books.push(this.doShow());
     this.source = new LocalDataSource(this.books);
+  }
+
+  /**
+   * Gets Books
+   */
+  private getBooks(): void {
+    this.loading = true;
+    this.bookService.getBooks().subscribe( (books: Book[]) => {
+      if (books) {
+        this.books = books;
+        this.source = new LocalDataSource(this.books);
+      } else {
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
+      }
+    },
+      error => {
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching books: ' + error.message);
+      console.error('Error fetching books: ' + error.message);
+      },
+      () => {
+      this.loading = false;
+      });
   }
 
   /**
