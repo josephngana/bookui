@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018.
+ * Author: caniksea.
+ * Last Modified: 2018/10/06 7:01 PM
+ */
+
 import {Component, OnInit} from '@angular/core';
 import {User} from '../domain/user';
 import {LocalDataSource} from 'ng2-smart-table';
@@ -6,20 +12,22 @@ import {DatePipe} from '@angular/common';
 import {Site} from '../../site-management/domain/site';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
+import {SiteService} from '../../site-management/service/site.service';
+import {UserService} from '../service/user.service';
 
 @Component({
   selector: 'ngx-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss'],
+  providers: [SiteService, UserService],
 })
 export class UsersComponent implements OnInit {
 
-  readonly domain: string = 'User';
+  private readonly domain: string = 'User';
   loading: boolean;
   source: LocalDataSource;
   users: User[];
   sites: Array<Site>;
-  dropdownData: object[];
 
   private toasterService: ToasterService;
 
@@ -35,6 +43,26 @@ export class UsersComponent implements OnInit {
   });
 
   settings = {
+    noDataMessage: 'No users',
+    add: {
+      addButtonContent: '<i class="nb-plus"></i>',
+      createButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true,
+    },
+    edit: {
+      editButtonContent: '<i class="nb-edit"></i>',
+      saveButtonContent: '<i class="nb-checkmark"></i>',
+      cancelButtonContent: '<i class="nb-close"></i>',
+      confirmSave: true,
+    },
+    delete: {
+      deleteButtonContent: '<i class="nb-trash"></i>',
+      confirmDelete: true,
+    },
+  };
+
+  mySettings = {
     noDataMessage: 'No users',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
@@ -88,6 +116,7 @@ export class UsersComponent implements OnInit {
         valuePrepareFunction: (date) => {
           return new DatePipe('en-EN').transform(date, 'yyyy-MM-dd');
         },
+        // width: '10%',
       },
     },
     pager: {
@@ -95,32 +124,86 @@ export class UsersComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService) {
+  constructor(toasterService: ToasterService,
+              private siteService: SiteService,
+              private userService: UserService,
+  ) {
     this.toasterService = toasterService;
   }
 
   ngOnInit() {
-    this.sites = [];
-    let site = this.makeSite('The Little Black Book');
-    this.sites.push(site);
-    site = this.makeSite('The Yahoos!');
-    this.sites.push(site);
-
-    this.dropdownData = [];
-    this.sites.forEach(s => {
-      this.dropdownData.push({
-        value: s.siteId,
-        title: s.siteName,
-      });
-    });
-
-    this.settings.columns.siteName.editor.config.list = this.dropdownData;
-    // this.settings = Object.assign({}, this.settings);
+    this.getSites();
 
     this.users = [];
-    this.source = new LocalDataSource(this.users);
   }
 
+  /**
+   * get sites
+   */
+  private getSites(): void {
+    this.loading = true;
+    this.siteService.getSites().subscribe(sites => {
+        if (sites) {
+          this.sites = sites;
+          const siteDropdown = this.populateSiteDropDown();
+
+          this.mySettings.columns.siteName.editor.config.list = siteDropdown;
+          this.settings = Object.assign({}, this.mySettings);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Could not retrieve sites!');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, this.domain, 'An error occurred: ' + error.message);
+      },
+      () => {
+        this.loading = false;
+        this.getUsers();
+      });
+  }
+
+  /**
+   * get users
+   */
+  private getUsers(): void {
+    this.loading = true;
+    this.userService.getUsers().subscribe(users => {
+        if (users) {
+          this.users = users;
+          this.users.forEach(user => user.siteName = this.getSiteName(user.siteId));
+          this.source = new LocalDataSource(this.users);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Could not retrieve users!');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, this.domain, 'An error occurred: ' + error.message);
+      },
+      () => {
+        this.loading = false;
+      });
+  }
+
+  /**
+   * Populate site dropdown
+   */
+  private populateSiteDropDown(): object[] {
+    const data = [];
+    this.sites.forEach(site => {
+      data.push({
+        value: site.siteId,
+        title: site.siteName,
+      });
+    });
+    return data;
+  }
+
+  /**
+   * Get site name given site id
+   * @param id
+   */
   private getSiteName(id: string): string {
     let siteName = '';
     const site = this.sites.find(s => s.siteId === id);
@@ -128,13 +211,10 @@ export class UsersComponent implements OnInit {
     return siteName;
   }
 
-  private makeSite(siteName: string): Site {
-    const site = new Site();
-    site.siteId = AppUtil.getId();
-    site.siteName = siteName;
-    return site;
-  }
-
+  /**
+   * create a user
+   * @param event
+   */
   onCreateConfirm(event): void {
     const newUser = event.newData;
     const siteId = newUser.siteName;
@@ -144,42 +224,75 @@ export class UsersComponent implements OnInit {
     if (!this.isEmptyInputs(siteId, firstName, lastName, email)) {
       if (AppUtil.isValidEmail(email)) {
         this.loading = true;
-        setTimeout(() => {
-          const user = new User();
-          user.userId = AppUtil.getId();
-          user.firstName = firstName;
-          user.lastName = lastName;
-          user.middleName = newUser.middleName;
-          user.email = email;
-          user.siteId = siteId;
-          user.siteName = this.getSiteName(siteId);
-          event.confirm.resolve(user);
-          this.loading = false;
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User added!');
-        }, 2000);
+        const user = this.buildUser(newUser);
+        this.userService.saveUser(user).subscribe(u => {
+            if (u) {
+              u.siteName = this.getSiteName(u.siteId);
+              event.confirm.resolve(u);
+              this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User added!');
+            } else {
+              event.confirm.reject();
+              this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'User NOT added!');
+            }
+          },
+          error => {
+            this.loading = false;
+            this.showInformation(ToasterUtils.TOAST_TYPE.error, this.domain, 'An error occurred: ' + error.message);
+          },
+          () => {
+            this.loading = false;
+          });
       } else {
         this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Invalid email');
       }
     }
   }
 
+  /**
+   * factory method for user
+   * @param newUser
+   */
+  private buildUser(newUser: any): User {
+    const user = new User();
+    user.userId = AppUtil.getId();
+    user.firstName = newUser.firstName;
+    user.lastName = newUser.lastName;
+    user.middleName = newUser.middleName;
+    user.email = newUser.email;
+    user.siteId = newUser.siteName;
+    return user;
+  }
+
+  /**
+   * confirm edit/update of user
+   * @param event
+   */
   onEditConfirm(event): void {
-    const newUser = event.newData;
-    const siteId = newUser.siteName;
-    const email = newUser.email;
-    const firstName = newUser.firstName;
-    const lastName = newUser.lastName;
+    const editedUser = event.newData;
+    const siteId = editedUser.siteName;
+    const email = editedUser.email;
+    const firstName = editedUser.firstName;
+    const lastName = editedUser.lastName;
     if (!this.isEmptyInputs(siteId, firstName, lastName, email)) {
       if (AppUtil.isValidEmail(email)) {
         this.loading = true;
-        setTimeout(() => {
-          // call service to update user
-          newUser.siteId = newUser.siteName;
-          newUser.siteName = this.getSiteName(newUser.siteName);
-          event.confirm.resolve(newUser);
-          this.loading = false;
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User updated!');
-        }, 2000);
+        this.userService.updateUser(editedUser).subscribe(user => {
+            if (user) {
+              user.siteName = this.getSiteName(user.siteId);
+              event.confirm.resolve(user);
+              this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User updated!');
+            } else {
+              event.confirm.reject();
+              this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'User NOT updated!');
+            }
+          },
+          error => {
+            this.loading = false;
+            this.showInformation(ToasterUtils.TOAST_TYPE.error, this.domain, 'An error occurred: ' + error.message);
+          },
+          () => {
+            this.loading = false;
+          });
       } else {
         this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Invalid email');
       }
@@ -187,10 +300,29 @@ export class UsersComponent implements OnInit {
 
   }
 
+  /**
+   * confirm delete of user
+   * @param event
+   */
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
-      // call service to delete user.
-      event.confirm.resolve();
+      this.loading = true;
+      this.userService.deleteUser(event.data).subscribe(u => {
+          if (u) {
+            event.confirm.resolve();
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User deleted!');
+          } else {
+            event.confirm.reject();
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'User NOT deleted!');
+          }
+        },
+        error => {
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.error, this.domain, 'An error occurred: ' + error.message);
+        },
+        () => {
+          this.loading = false;
+        });
     } else {
       event.confirm.reject();
     }
@@ -215,6 +347,13 @@ export class UsersComponent implements OnInit {
     this.toasterService.popAsync(toast);
   }
 
+  /**
+   * Check if params are empty
+   * @param siteId
+   * @param firstName
+   * @param lastName
+   * @param email
+   */
   private isEmptyInputs(siteId: string, firstName: string, lastName: string, email: string): boolean {
     if (siteId === '' || email === '' || firstName === '' || lastName === '') {
       if (siteId === '') this.showInformation(ToasterUtils.TOAST_TYPE.info, this.domain,

@@ -82,7 +82,8 @@ export class RolesComponent implements OnInit {
       },
       error => {
         this.loading = false;
-        console.error('Error fetching roles', error.message);
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Role', 'Error fetching roles: ' + error.message);
+        console.error('Error fetching roles:' + error.message);
       },
       () => {
         this.loading = false;

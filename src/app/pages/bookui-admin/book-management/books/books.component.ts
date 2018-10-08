@@ -6,13 +6,13 @@ import {DatePipe} from '@angular/common';
 import {LocalDataSource} from 'ng2-smart-table';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
-import {AppUtil} from '../../../../conf/app-util';
+import {SiteService} from '../../site-management/service/site.service';
 
 @Component({
   selector: 'ngx-books',
   templateUrl: './books.component.html',
   styleUrls: ['./books.component.scss'],
-  providers: [NgbModal],
+  providers: [NgbModal, SiteService],
 })
 export class BooksComponent implements OnInit {
   loading: boolean;
@@ -86,7 +86,10 @@ export class BooksComponent implements OnInit {
     },
   };
 
-  constructor(private modalService: NgbModal, toasterService: ToasterService) {
+  constructor(private modalService: NgbModal,
+              toasterService: ToasterService,
+              private siteService: SiteService,
+  ) {
     this.toasterService = toasterService;
   }
 
@@ -103,10 +106,15 @@ export class BooksComponent implements OnInit {
   onDelete(event): void {
     const book = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
+      this.loading = true;
+      setTimeout(() => {
       const bookId = book.id;
       const filteredBooks = this.books.filter( b => b.id !== bookId);
       this.books = filteredBooks;
       this.source.load(this.books);
+      this.loading = false;
+      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Deleted');
+    }, 2000);
     }
   }
 
