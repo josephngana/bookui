@@ -19,7 +19,6 @@ export class ChaptersComponent implements OnInit {
   source: LocalDataSource;
   chapters: Array<Chapter>;
   private toasterService: ToasterService;
-
 // toaster configuration
   public toasterConfig: ToasterConfig = new ToasterConfig({
     positionClass: ToasterUtils.POSITION_CLASS,
@@ -33,6 +32,7 @@ export class ChaptersComponent implements OnInit {
 
   settings = {
     mode: 'external',
+    noDataMessage: 'No chapters',
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
@@ -108,17 +108,23 @@ export class ChaptersComponent implements OnInit {
     this.processAddEditChapter(modalHeader, editChapter);
   }
 
+  onEdit(event): void {
+    const chapter = event.data;
+    const heading = 'Book Management - Edit Chapter';
+    console.info('Editing chapter...');
+    this.processAddEditChapter(heading, chapter);
+  }
+
   private processAddEditChapter(header: string, chapter: Chapter): void {
     const activeModal = this.modalService.open(AddEditChapterComponent, { size: 'lg', container: 'nb-layout' });
 
     activeModal.componentInstance.header = header;
     activeModal.componentInstance.editChapter = chapter;
-    let message = 'chapter added';
+    let message = 'chapter added!';
     if (!chapter) {
-    }else  {
-      message = 'chapter updated';
+    } else {
+      message = 'chapter updated!';
     }
-
     activeModal.result.then(result => {
       if (result) {
         this.loading = true;
@@ -130,6 +136,13 @@ export class ChaptersComponent implements OnInit {
           }
           this.chapters.push(result);
           this.source.load(this.chapters);
+        if (chapter) {
+          const chapterId = chapter.id;
+          const filteredChapters = this.chapters.filter( b => b.id !== chapterId);
+          this.chapters = filteredChapters;
+        }
+        this.chapters.push(result);
+        this.source.load(this.chapters);
           this.loading = false;
           this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', message);
         }, 2000);
@@ -138,14 +151,6 @@ export class ChaptersComponent implements OnInit {
       console.error(error);
     });
   }
-
-  onEdit(event): void {
-    const chapter = event.data;
-    const heading = 'Book Management - Edit Chapter';
-    console.info('Editing chapter...');
-    this.processAddEditChapter(heading, chapter);
-  }
-
   private showInformation(type: string, title: string, info: string): void {
     type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
     const toast: Toast = {
