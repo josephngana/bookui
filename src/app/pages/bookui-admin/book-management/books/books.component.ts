@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Book} from '../domain/book';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {AddEditBookComponent} from '../modals/add-edit-book/add-edit-book.component';
@@ -7,7 +7,8 @@ import {LocalDataSource} from 'ng2-smart-table';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
 import {SiteService} from '../../site-management/service/site.service';
-import {BookService} from '../services/book.service';
+import {BookService} from '../service/book.service';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-books',
@@ -19,6 +20,7 @@ export class BooksComponent implements OnInit {
   loading: boolean;
   source: LocalDataSource;
   books: Array<Book>;
+  motsepeSiteId;
   private toasterService: ToasterService;
 
   // toaster configuration
@@ -96,10 +98,26 @@ export class BooksComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getMotsepeSiteId();
     this.books = [];
-    this.getBooks();
-    this.books.push(this.doShow());
     this.source = new LocalDataSource(this.books);
+  }
+
+  private getMotsepeSiteId(): void {
+    this.loading = true;
+    this.siteService.getSites().subscribe(sites => {
+        if (sites) {
+          this.motsepeSiteId = sites[0].siteId;
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching site: ' + error.message);
+      },
+      () => {
+        this.loading = false;
+        this.getBooks();
+      });
   }
 
   /**
@@ -107,21 +125,21 @@ export class BooksComponent implements OnInit {
    */
   private getBooks(): void {
     this.loading = true;
-    this.bookService.getBooks().subscribe( (books: Book[]) => {
-      if (books) {
-        this.books = books;
-        this.source = new LocalDataSource(this.books);
-      } else {
-        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
-      }
-    },
+    this.bookService.getBooks(this.motsepeSiteId).subscribe((books: Book[]) => {
+        if (books) {
+          this.books = books;
+          this.source = new LocalDataSource(this.books);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
+        }
+      },
       error => {
-      this.loading = false;
-      this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching books: ' + error.message);
-      console.error('Error fetching books: ' + error.message);
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching books: ' + error.message);
+        console.error('Error fetching books: ' + error.message);
       },
       () => {
-      this.loading = false;
+        this.loading = false;
       });
   }
 
@@ -134,29 +152,16 @@ export class BooksComponent implements OnInit {
     if (window.confirm('Are you sure you want to delete?')) {
       this.loading = true;
       setTimeout(() => {
-      const bookId = book.id;
-      const filteredBooks = this.books.filter( b => b.id !== bookId);
-      this.books = filteredBooks;
-      this.source.load(this.books);
-      this.loading = false;
-      this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Deleted');
-    }, 2000);
+        const bookId = book.id;
+        const filteredBooks = this.books.filter(b => b.id !== bookId);
+        this.books = filteredBooks;
+        this.source.load(this.books);
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Deleted');
+      }, 2000);
     }
   }
 
-
-  doShow(): Book {
-    const littleBlackBook = new Book();
-    littleBlackBook.id = '1254147';
-    littleBlackBook.title = 'Little Black Book';
-    littleBlackBook.id = '8547859';
-    littleBlackBook.author = 'James Brown';
-    littleBlackBook.datePublished = new Date('2015-01-01');
-    littleBlackBook.eisbn = 'e-isbn-098485';
-    littleBlackBook.isbn = 'isbn-987542';
-    littleBlackBook.publisher = 'Brown Gordon';
-    return littleBlackBook;
-  }
   /**
    * Handles the create action of new book
    * @param event: object
@@ -167,6 +172,7 @@ export class BooksComponent implements OnInit {
     console.info('Adding new book...');
     this.processAddEditBook(modalHeader, editBook);
   }
+
   /**
    * Handles the edit action of an existing book
    * @param event: object
@@ -179,7 +185,7 @@ export class BooksComponent implements OnInit {
   }
 
   processAddEditBook(modalHeader: string, book: Book): void {
-    const activeModal = this.modalService.open(AddEditBookComponent, { size: 'lg', container: 'nb-layout' });
+    const activeModal = this.modalService.open(AddEditBookComponent, {size: 'lg', container: 'nb-layout'});
 
     activeModal.componentInstance.header = modalHeader;
     activeModal.componentInstance.editBook = book;
@@ -192,21 +198,32 @@ export class BooksComponent implements OnInit {
       message = 'Book updated!';
     }
 
-    activeModal.result.then(result => {
-      if (result) {
-        console.log(result);
+    activeModal.result.then((b: Book) => {
+      if (b) {
+        b.id = AppUtil.getId();
+        b.siteId = this.motsepeSiteId;
+        console.log(b);
         this.loading = true;
-        setTimeout(() => {
-          if (book) {
-            const bookId = book.id;
-            const filteredBooks = this.books.filter( b => b.id !== bookId);
-            this.books = filteredBooks;
-          }
-          this.books.push(result);
-          this.source.load(this.books);
-          this.loading = false;
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', message);
-          }, 2000);
+        this.bookService.addBook(b).subscribe(savedBook => {
+            if (savedBook) {
+              // const bookId = book.id;
+              // const filteredBooks = this.books.filter(b => b.id !== bookId);
+              // this.books = filteredBooks;
+              this.books.push(b);
+              this.source.load(this.books);
+              this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', message);
+            } else {
+              message = 'Book NOT saved!';
+              this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', message);
+            }
+          },
+          error => {
+            this.loading = false;
+            console.error('Error saving book', error.message);
+          },
+          () => {
+            this.loading = false;
+          });
       }
     }).catch(error => {
       console.error(error);
