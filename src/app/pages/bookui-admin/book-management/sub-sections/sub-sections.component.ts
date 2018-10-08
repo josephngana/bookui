@@ -72,7 +72,7 @@ private toasterService: ToasterService;
   };
 
   constructor(private modalService: NgbModal, toasterService: ToasterService) {
-    this.toasterService = this.toasterService;
+    this.toasterService = toasterService;
   }
 
   ngOnInit() {
@@ -82,10 +82,15 @@ private toasterService: ToasterService;
   onDelete(event): void {
     const subsection = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
+      this.loading = true;
+      setTimeout(() => {
       const subsectionId = subsection.id;
       const filteredSubSections = this.subsections.filter( b => b.id !== subsectionId);
       this.subsections = filteredSubSections;
       this.source.load(this.subsections);
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Subsection', 'subsection deleted!');
+      }, 2000);
     }
   }
 
@@ -105,8 +110,16 @@ private toasterService: ToasterService;
     const activeModal = this.modalService.open(AddEditSubsectionComponent, { size: 'lg', container: 'nb-layout' });
     activeModal.componentInstance.header = modalheader;
     activeModal.componentInstance.editSubSection = subsection;
+
+    let message = 'subsection added!';
+    if (!subsection) {
+    } else {
+      message = 'subsection updated!';
+    }
     activeModal.result.then(result => {
       if (result) {
+        this.loading = true;
+        setTimeout(() => {
         console.log(result);
         if (subsection) {
           const subsectionId = subsection.id;
@@ -115,6 +128,9 @@ private toasterService: ToasterService;
         }
         this.subsections.push(result);
         this.source.load(this.subsections);
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Subsection', message);
+        }, 2000);
       }
     }).catch(error => {
       console.error(error);
