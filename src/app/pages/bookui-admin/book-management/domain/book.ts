@@ -9,5 +9,5 @@ export class Book extends BookBase {
   author: string;
   publisher: string;
   datePublished: Date;
-  chapters: Array<Chapter> = [];
+  chapterIds: Array<Chapter> = [];
 }
