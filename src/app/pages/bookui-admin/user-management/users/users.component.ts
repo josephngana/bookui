@@ -259,7 +259,7 @@ export class UsersComponent implements OnInit {
     user.lastName = newUser.lastName;
     user.middleName = newUser.middleName;
     user.email = newUser.email;
-    user.motsepeSiteId = newUser.siteName;
+    user.siteId = newUser.siteName;
     return user;
   }
 

@@ -148,17 +148,29 @@ export class BooksComponent implements OnInit {
    * @param event: object
    */
   onDelete(event): void {
-    const book = event.data;
     if (window.confirm('Are you sure you want to delete?')) {
+      const bookToDelete = event.data;
+      let filteredBooks = this.books;
+      console.log('before deleting... ', filteredBooks);
       this.loading = true;
-      setTimeout(() => {
-        const bookId = book.id;
-        const filteredBooks = this.books.filter(b => b.id !== bookId);
-        this.books = filteredBooks;
-        this.source.load(this.books);
-        this.loading = false;
-        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book Deleted');
-      }, 2000);
+      this.bookService.deleteBook(bookToDelete).subscribe(isSuccess => {
+          if (isSuccess) {
+            filteredBooks = this.books.filter(b => b.id !== bookToDelete.id);
+            console.log('after deleting...', filteredBooks);
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book deleted!');
+          } else {
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT deleted!');
+          }
+        },
+        error => {
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error deleting book: ' + error.message);
+        },
+        () => {
+          this.books = filteredBooks;
+          this.source.load(this.books);
+          this.loading = false;
+        });
     }
   }
 
@@ -190,44 +202,43 @@ export class BooksComponent implements OnInit {
     activeModal.componentInstance.header = modalHeader;
     activeModal.componentInstance.editBook = book;
 
-    let message = 'Book added!';
-
-    if (!book) {
-
-    } else {
-      message = 'Book updated!';
-    }
-
     activeModal.result.then((b: Book) => {
       if (b) {
-        b.id = AppUtil.getId();
-        b.siteId = this.motsepeSiteId;
-        console.log(b);
-        this.loading = true;
-        this.bookService.addBook(b).subscribe(savedBook => {
-            if (savedBook) {
-              // const bookId = book.id;
-              // const filteredBooks = this.books.filter(b => b.id !== bookId);
-              // this.books = filteredBooks;
-              this.books.push(b);
-              this.source.load(this.books);
-              this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', message);
-            } else {
-              message = 'Book NOT saved!';
-              this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', message);
-            }
-          },
-          error => {
-            this.loading = false;
-            console.error('Error saving book', error.message);
-          },
-          () => {
-            this.loading = false;
-          });
+        if (book) {
+          // call method to process edit
+          // this.
+        } else {
+          // call method to process add
+          this.addNewBook(b);
+        }
       }
     }).catch(error => {
       console.error(error);
     });
+  }
+
+  private addNewBook(book: Book): void {
+    book.id = AppUtil.getId();
+    book.siteId = this.motsepeSiteId;
+    console.log(book);
+    this.loading = true;
+    this.bookService.addBook(book).subscribe(savedBook => {
+        if (savedBook) {
+          this.books.push(book);
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book added!');
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT added!');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error adding book: ' + error.message);
+        console.error();
+      },
+      () => {
+        this.loading = false;
+        this.source.load(this.books);
+      });
   }
 
   /**

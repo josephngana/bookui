@@ -137,7 +137,7 @@ export class SitesComponent implements OnInit {
       this.showInformation(ToasterUtils.TOAST_TYPE.info, 'Site', 'Site name is required!');
     } else {
       const site = new Site();
-      site.motsepeSiteId = AppUtil.getId();
+      site.siteId = AppUtil.getId();
       site.siteName = siteName;
       site.siteDescription = newSite.siteDescription;
       this.loading = true;

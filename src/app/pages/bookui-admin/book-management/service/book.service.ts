@@ -52,4 +52,13 @@ export class BookService {
     return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe();
   }
 
+  /**
+   * Update a book
+   */
+  updateBook (book: Book): Observable<Book> {
+    const url = this.bookUrl + 'book/update';
+    return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000));
+  }
+
 }
