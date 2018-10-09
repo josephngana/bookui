@@ -1,4 +1,3 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
 <nb-card class="inline-form-card">
 <nb-card-header>Book Management - Chapters</nb-card-header>
 <nb-card-body>
@@ -18,12 +17,12 @@
 </nb-card-body>
 </nb-card>
 
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
   <nb-card-header>
     Book Management - Chapters
   </nb-card-header>
 
-  <nb-card-body>
+  <nb-card-body >
     <ng2-smart-table [settings]="settings" [source]="source"
                      (create)="onCreate($event)" (edit)="onEdit($event)" (delete)="onDelete($event)">
     </ng2-smart-table>
