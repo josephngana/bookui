@@ -69,8 +69,6 @@ export class AddEditBookComponent implements OnInit {
       book.title = entity.bookTitle;
       book.story = entity.bookStory;
       book.description = entity.bookDescription;
-      // call service to save book...if successful, call close with new book as below
-      console.log(book.story);
       this.activeModal.close(book);
     }
 
