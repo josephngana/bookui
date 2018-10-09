@@ -9,6 +9,8 @@ import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toa
 import {ToasterUtils} from '../../../../conf/util';
 import {ChapterService} from '../service/chapter.service';
 import {BookService} from '../service/book.service';
+import {SiteService} from '../../site-management/service/site.service';
+import {Book} from '../domain/book';
 
 @Component({
   selector: 'ngx-chapters',
@@ -19,6 +21,8 @@ import {BookService} from '../service/book.service';
 export class ChaptersComponent implements OnInit {
   loading: boolean;
   source: LocalDataSource;
+  motsepeSiteId;
+  books: Array<Book>;
   chapters: Array<Chapter>;
   private toasterService: ToasterService;
 // toaster configuration
@@ -74,11 +78,15 @@ export class ChaptersComponent implements OnInit {
   };
 
   constructor(private modalService: NgbModal, toasterService: ToasterService,
-              private chapterService: ChapterService) {
+              private chapterService: ChapterService,
+              private bookService: BookService,
+              private siteService: SiteService) {
     this.toasterService = toasterService;
   }
 
   ngOnInit() {
+    this.getMotsepeSiteId();
+    this.getBooks();
     this.chapters = [];
     const chapter = new Chapter();
     this.getChapters();
@@ -86,8 +94,42 @@ export class ChaptersComponent implements OnInit {
     // chapter.title = 'Emergency';
     // chapter.description = 'This is for emergencies';
     this.chapters.push(chapter);
-
     this.source = new LocalDataSource(this.chapters);
+  }
+  private getMotsepeSiteId(): void {
+    this.loading = true;
+    this.siteService.getSites().subscribe(sites => {
+        if (sites) {
+          this.motsepeSiteId = sites[0].siteId;
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching site: ' + error.message);
+      },
+      () => {
+        this.loading = false;
+        this.getBooks();
+      });
+  }
+  private getBooks(): void {
+    this.loading = true;
+    this.bookService.getBooks(this.motsepeSiteId).subscribe((books: Book[]) => {
+        if (books) {
+          this.books = books;
+          this.source = new LocalDataSource(this.books);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error fetching books: ' + error.message);
+        console.error('Error fetching books: ' + error.message);
+      },
+      () => {
+        this.loading = false;
+      });
   }
   private getChapters(): void {
     this.loading = true;
@@ -102,7 +144,7 @@ export class ChaptersComponent implements OnInit {
       }, error => {
       this.loading = false;
       this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error fetching chapters ' + error.message);
-      console.error('Error fetching roles:');
+      console.error('Error fetching chapters:');
     },
       () => {
       this.loading = false;

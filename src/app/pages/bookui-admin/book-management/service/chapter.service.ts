@@ -12,7 +12,7 @@ import {catchError, timeout} from 'rxjs/operators';
 })
 export class ChapterService {
 
-  chapterUrl = SERVICE_BASE_URL + 'chapter/';
+  chapterUrl = SERVICE_BASE_URL + 'books/site/';
   private handleError: HandleError;
   constructor(private http: HttpClient,
               httpErrorHandler: ErrorHandlerService) {
@@ -23,7 +23,7 @@ export class ChapterService {
    * Add Chapter
    */
   addChapter(chapter: Chapter): Observable<Chapter> {
-    const url = this.chapterUrl + 'create';
+    const url = this.chapterUrl + 'chapters/create';
     // const body = JSON.stingify(chapter);
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders())
       .pipe(
@@ -34,7 +34,7 @@ export class ChapterService {
    * Get Chapter
    */
   getChapters(): Observable<Chapter[]> {
-    const url = this.chapterUrl + 'getall';
+    const url = this.chapterUrl + 'chapters/getforids/';
     return this.http.get<Chapter[]>(url).pipe(
       timeout(10000),
       // catchError(this.handleError('getChapters', [])),
@@ -45,7 +45,7 @@ export class ChapterService {
    * delete chapter
    */
   deleteChapter(chapter: Chapter): Observable<Chapter> {
-    const url = this.chapterUrl + 'delete';
+    const url = this.chapterUrl + 'chapter/delete';
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders()).pipe(
       // catchError(this.handleError('deleteChapter', chapter)),
     );
@@ -55,7 +55,7 @@ export class ChapterService {
    * update chapter
    */
   updateChapter(chapter: Chapter): Observable<Chapter> {
-    const url = this.chapterUrl + 'update';
+    const url = this.chapterUrl + 'chapter/update';
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders()).pipe(
       timeout(10000),
       // catchError(this.handleError('updateChapter', chapter)),
