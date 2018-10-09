@@ -41,7 +41,9 @@ export class BookService {
    */
   addBook(book: Book): Observable<Book> {
     const url = this.bookUrl + 'book/create';
-    return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe();
+    return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
+    );
   }
 
   /**
@@ -49,7 +51,9 @@ export class BookService {
    */
   deleteBook(book: Book): Observable<Book> {
     const url = this.bookUrl + 'book/delete';
-    return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe();
+    return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
+      );
   }
 
   /**
