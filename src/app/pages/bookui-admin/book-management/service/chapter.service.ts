@@ -23,7 +23,7 @@ export class ChapterService {
    * Add Chapter
    */
   addChapter(chapter: Chapter): Observable<Chapter> {
-    const url = this.chapterUrl + 'chapters/create';
+    const url = this.chapterUrl + 'chapter/create';
     // const body = JSON.stingify(chapter);
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders())
       .pipe(
@@ -33,8 +33,9 @@ export class ChapterService {
   /**
    * Get Chapter
    */
-  getChapters(): Observable<Chapter[]> {
-    const url = this.chapterUrl + 'chapters/getforids/';
+  getChapters(chapterIds: string[]): Observable<Chapter[]> {
+    const url = this.chapterUrl + 'chapters/getforids/' + chapterIds.join();
+    console.log(url);
     return this.http.get<Chapter[]>(url).pipe(
       timeout(10000),
       // catchError(this.handleError('getChapters', [])),

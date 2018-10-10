@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
 import {Chapter} from '../domain/chapter';
-import {AppUtil} from '../../../../conf/app-util';
 import {DatePipe} from '@angular/common';
 import {AddEditChapterComponent} from '../modals/add-edit-chapter/add-edit-chapter.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -19,12 +18,16 @@ import {Book} from '../domain/book';
   providers: [NgbModal, BookService],
 })
 export class ChaptersComponent implements OnInit {
+
   loading: boolean;
   source: LocalDataSource;
-  motsepeSiteId;
+  motsepeSiteId: string;
+  book: Book;
   books: Array<Book>;
   chapters: Array<Chapter>;
+
   private toasterService: ToasterService;
+
 // toaster configuration
   public toasterConfig: ToasterConfig = new ToasterConfig({
     positionClass: ToasterUtils.POSITION_CLASS,
@@ -86,16 +89,11 @@ export class ChaptersComponent implements OnInit {
 
   ngOnInit() {
     this.getMotsepeSiteId();
-    this.getBooks();
+
     this.chapters = [];
-    const chapter = new Chapter();
-    this.getChapters();
-    chapter.id = AppUtil.getId();
-    // chapter.title = 'Emergency';
-    // chapter.description = 'This is for emergencies';
-    this.chapters.push(chapter);
     this.source = new LocalDataSource(this.chapters);
   }
+
   private getMotsepeSiteId(): void {
     this.loading = true;
     this.siteService.getSites().subscribe(sites => {
@@ -112,12 +110,12 @@ export class ChaptersComponent implements OnInit {
         this.getBooks();
       });
   }
+
   private getBooks(): void {
     this.loading = true;
     this.bookService.getBooks(this.motsepeSiteId).subscribe((books: Book[]) => {
         if (books) {
           this.books = books;
-          this.source = new LocalDataSource(this.books);
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
         }
@@ -131,45 +129,68 @@ export class ChaptersComponent implements OnInit {
         this.loading = false;
       });
   }
-  private getChapters(): void {
-    this.loading = true;
-    this.chapterService.getChapters().subscribe((chapters: Chapter[]) => {
-      if (chapters) {
-        this.chapters = chapters;
-        this.source = new LocalDataSource(this.chapters);
-        // this.loading = false;
-      } else {
-        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'No chapters retrieved ');
+
+  onChange(event): void {
+    const bookId = event.srcElement.value;
+    if (bookId !== '') {
+      this.getBook(bookId);
+    } else {
+      this.book = null;
+    }
+  }
+
+  private getBook(bookId: string): void {
+    this.book = this.books.filter(b => b.id === bookId)[0];
+    if (this.book) {
+      const chapterIds = this.book.chapterIds;
+      if (chapterIds.length > 0) {
+        this.getChapters(chapterIds);
       }
+    }
+  }
+
+  private getChapters(chapterIds: string[]): void {
+    this.loading = true;
+    this.chapterService.getChapters(chapterIds).subscribe((chapters: Chapter[]) => {
+        if (chapters) {
+          this.chapters = chapters;
+          this.source = new LocalDataSource(this.chapters);
+          // this.loading = false;
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'No chapters retrieved ');
+        }
       }, error => {
-      this.loading = false;
-      this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error fetching chapters ' + error.message);
-      console.error('Error fetching chapters:');
-    },
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error fetching chapters ' + error.message);
+        console.error('Error fetching chapters:');
+      },
       () => {
-      this.loading = false;
+        this.loading = false;
       });
   }
 
   onDelete(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
+      const chapterToDelete = event.data;
+      let filteredChapters = this.chapters;
       this.loading = true;
-      this.chapterService.deleteChapter(event.data).subscribe(chapter => {
-        if (chapter) {
-          event.confirm.resolvee();
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'Chapter deleted!');
-        } else {
-          event.confirm.reject();
-          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Chapter NOT deleted');
-        }
-      }, error => {
-        this.loading = false;
-        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Chapter', 'An error occurred: ' + error.message);
-      }, () => {
-        this.loading = false;
-      });
-    }else {
-      event.confirm.reject();
+      this.chapterService.deleteChapter(chapterToDelete).subscribe(isSuccess => {
+          if (isSuccess) {
+            filteredChapters = this.chapters.filter(b => b.id !== chapterToDelete.id);
+            this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'Chapter deleted!');
+          } else {
+            this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Chapter NOT deleted!');
+          }
+        },
+        error => {
+          this.loading = false;
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error deleting chapter: ' + error.message);
+        },
+        () => {
+          this.chapters = filteredChapters;
+          this.source.load(this.chapters);
+          this.loading = false;
+        });
     }
   }
 
@@ -188,7 +209,7 @@ export class ChaptersComponent implements OnInit {
   }
 
   private processAddEditChapter(header: string, chapter: Chapter): void {
-    const activeModal = this.modalService.open(AddEditChapterComponent, { size: 'lg', container: 'nb-layout' });
+    const activeModal = this.modalService.open(AddEditChapterComponent, {size: 'lg', container: 'nb-layout'});
 
     activeModal.componentInstance.header = header;
     activeModal.componentInstance.editChapter = chapter;
@@ -203,7 +224,7 @@ export class ChaptersComponent implements OnInit {
         setTimeout(() => {
           if (chapter) {
             const chapterId = chapter.id;
-            const filteredChapters = this.chapters.filter( b => b.id !== chapterId);
+            const filteredChapters = this.chapters.filter(b => b.id !== chapterId);
             this.chapters = filteredChapters;
           }
           this.chapters.push(result);
@@ -216,6 +237,7 @@ export class ChaptersComponent implements OnInit {
       console.error(error);
     });
   }
+
   private showInformation(type: string, title: string, info: string): void {
     type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
     const toast: Toast = {
