@@ -1,0 +1,19 @@
+<nb-card size="medium">
+  <nb-card-header>
+    <span>Books per Site</span>
+  </nb-card-header>
+  <nb-card-body>
+    <ul class="books-per-site-list">
+      <li *ngFor="let item of booksPerSite">
+        <div class="visited-date">
+          <div class="title">Site</div>
+          <div class="value">{{ item.siteName }}</div>
+        </div>
+        <div class="visited-pages-count">
+          <div class="title">Number of Books</div>
+          <div class="value">{{ item.numberOfBooks }}</div>
+        </div>
+      </li>
+    </ul>
+  </nb-card-body>
+</nb-card>

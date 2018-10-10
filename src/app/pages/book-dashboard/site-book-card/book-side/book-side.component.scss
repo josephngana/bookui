@@ -1,0 +1,29 @@
+@import '../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  /deep/ nb-card-header {
+    display: flex;
+    justify-content: space-between;
+
+    .header-container {
+      display: flex;
+      @include nb-rtl(flex-direction, row-reverse);
+    }
+
+    .title {
+      padding-left: 1rem;
+    }
+  }
+
+  ///deep/ nb-card-body {
+  //  display: flex;
+  //  position: relative;
+  //  flex: 1;
+  //  padding: 0 1rem;
+  //  overflow: hidden;
+  //}
+}
