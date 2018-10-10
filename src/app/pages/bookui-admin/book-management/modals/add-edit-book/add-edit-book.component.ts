@@ -110,6 +110,7 @@ export class AddEditBookComponent implements OnInit {
   }
 
   private formatToNgbDateStruct(date: Date): NgbDateStruct {
+    date = new Date(date);
     const dateStruct: NgbDateStruct = {
       year: date.getFullYear(),
       month: date.getMonth() + 1,
