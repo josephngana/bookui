@@ -206,7 +206,7 @@ export class BooksComponent implements OnInit {
       if (b) {
         if (book) {
           // call method to process edit
-          // this.
+           this.updateExistingBook(b);
         } else {
           // call method to process add
           this.addNewBook(b);
@@ -217,6 +217,33 @@ export class BooksComponent implements OnInit {
     });
   }
 
+  // edits existing book
+ private updateExistingBook(event): void {
+   const bookToUpdate = event.data;
+   let filteredBooks = this.books;
+   console.log('before updating... ', filteredBooks);
+   this.loading = true;
+   this.bookService.updateBook(bookToUpdate).subscribe(book => {
+       if (book) {
+         filteredBooks = this.books.filter(b => b.id !== bookToUpdate.id);
+         console.log('after updating...', filteredBooks);
+         this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book updated!');
+       } else {
+         this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT updated!');
+       }
+     },
+     error => {
+       this.loading = false;
+       this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error updating book: ' + error.message);
+     },
+     () => {
+       this.books = filteredBooks;
+       this.source.load(this.books);
+       this.loading = false;
+     });
+ }
+
+  // adds new book
   private addNewBook(book: Book): void {
     book.id = AppUtil.getId();
     book.siteId = this.motsepeSiteId;
@@ -232,7 +259,7 @@ export class BooksComponent implements OnInit {
       },
       error => {
         this.loading = false;
-        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error adding book: ' + error.message);
+        this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error adding book: ' + error.message);
         console.error();
       },
       () => {
