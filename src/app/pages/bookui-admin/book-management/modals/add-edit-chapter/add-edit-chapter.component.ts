@@ -37,17 +37,17 @@ export class AddEditChapterComponent implements OnInit {
   addChapter(entity, isValid: boolean): void {
     if (isValid) {
       const chapter = new Chapter();
-      chapter.id = AppUtil.getId();
-      chapter.title = entity.chapterTitle;
-      chapter.description = entity.chapterDescription;
+      chapter.chapterId = AppUtil.getId();
+      chapter.chapterTitle = entity.chapterTitle;
+      chapter.chapterDescription = entity.chapterDescription;
       chapter.story = entity.chapterStory;
       // call service to save book...if successful, call close with new book as below
       this.activeModal.close(chapter);
     }
   }
   private populateForm(): void {
-    this.chapterTitle.setValue(this.editChapter.title);
-    this.chapterDescription.setValue(this.editChapter.description);
+    this.chapterTitle.setValue(this.editChapter.chapterTitle);
+    this.chapterDescription.setValue(this.editChapter.chapterDescription);
     this.chapterStory.setValue(this.editChapter.story);
   }
   onEditorChange(event): void {
