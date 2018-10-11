@@ -91,7 +91,7 @@ export class SectionsComponent implements OnInit {
       this.loading = true;
       setTimeout(() => {
       const sectionId = section.id;
-      const filteredSections = this.sections.filter( b => b.id !== sectionId);
+      const filteredSections = this.sections.filter( b => b.sectionId !== sectionId);
       this.sections = filteredSections;
       this.source.load(this.sections);
         this.loading = false;
@@ -137,8 +137,8 @@ export class SectionsComponent implements OnInit {
         this.loading = true;
         setTimeout(() => {
         if (section) {
-          const sectionId = section.id;
-          const filteredSections = this.sections.filter( b => b.id !== sectionId);
+          const sectionId = section.sectionId;
+          const filteredSections = this.sections.filter( b => b.sectionId !== sectionId);
           this.sections = filteredSections;
         }
         this.sections.push(result);
