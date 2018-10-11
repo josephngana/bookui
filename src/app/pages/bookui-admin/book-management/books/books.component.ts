@@ -151,12 +151,10 @@ export class BooksComponent implements OnInit {
     if (window.confirm('Are you sure you want to delete?')) {
       const bookToDelete = event.data;
       let filteredBooks = this.books;
-      console.log('before deleting... ', filteredBooks);
       this.loading = true;
       this.bookService.deleteBook(bookToDelete).subscribe(isSuccess => {
           if (isSuccess) {
-            filteredBooks = this.books.filter(b => b.bookId !== bookToDelete.id);
-            console.log('after deleting...', filteredBooks);
+            filteredBooks = this.books.filter(b => b.bookId !== bookToDelete.bookId);
             this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book deleted!');
           } else {
             this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT deleted!');
@@ -219,10 +217,12 @@ export class BooksComponent implements OnInit {
 
   // edits existing book
   private updateExistingBook(book: Book): void {
+    let filteredBooks = this.books;
     this.loading = true;
     this.bookService.updateBook(book).subscribe( editBook => {
         if (editBook) {
-          this.books.push(book);
+          filteredBooks = this.books.filter(b => b.bookId !== book.bookId);
+          filteredBooks.push(editBook);
           this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book updated!');
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT updated!');
@@ -233,8 +233,9 @@ export class BooksComponent implements OnInit {
         this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Book', 'Error adding book ' + error.message);
       },
       () => {
-        this.loading = false;
+        this.books = filteredBooks;
         this.source.load(this.books);
+        this.loading = false;
       });
   }
 
