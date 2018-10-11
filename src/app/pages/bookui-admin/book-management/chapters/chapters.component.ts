@@ -10,6 +10,7 @@ import {ChapterService} from '../service/chapter.service';
 import {BookService} from '../service/book.service';
 import {SiteService} from '../../site-management/service/site.service';
 import {Book} from '../domain/book';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-chapters',
@@ -213,29 +214,44 @@ export class ChaptersComponent implements OnInit {
 
     activeModal.componentInstance.header = header;
     activeModal.componentInstance.editChapter = chapter;
-    let message = 'chapter added!';
-    if (!chapter) {
-    } else {
-      message = 'chapter updated!';
-    }
-    activeModal.result.then(result => {
-      if (result) {
-        this.loading = true;
-        setTimeout(() => {
-          if (chapter) {
-            const chapterId = chapter.id;
-            const filteredChapters = this.chapters.filter(b => b.id !== chapterId);
-            this.chapters = filteredChapters;
-          }
-          this.chapters.push(result);
-          this.source.load(this.chapters);
-          this.loading = false;
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', message);
-        }, 2000);
+
+    activeModal.result.then((c: Chapter) => {
+      if (c) {
+        if (chapter) {
+          // call method to process edit
+          // this.
+        } else {
+          // call method to process add
+          this.addNewChapter(c);
+        }
       }
     }).catch(error => {
       console.error(error);
     });
+  }
+
+  private addNewChapter(chapter: Chapter): void {
+    chapter.id = AppUtil.getId();
+    this.motsepeSiteId;
+    console.log(chapter);
+    this.loading = true;
+    this.chapterService.addChapter(chapter).subscribe(savedChapter => {
+        if (savedChapter) {
+          this.chapters.push(chapter);
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book added!');
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT added!');
+        }
+      },
+      error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error adding book: ' + error.message);
+        console.error();
+      },
+      () => {
+        this.loading = false;
+        this.source.load(this.chapters);
+      });
   }
 
   private showInformation(type: string, title: string, info: string): void {
