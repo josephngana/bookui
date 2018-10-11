@@ -43,18 +43,18 @@ export class AddEditSectionComponent implements OnInit {
   addSection(entity, isValid: boolean): void {
     if (isValid) {
       const section = new Section();
-      section.id = AppUtil.getId();
-      section.title = entity.sectionTitle;
+      section.sectionId = AppUtil.getId();
+      section.sectionTitle = entity.sectionTitle;
       section.story = entity.sectionStory;
-      section.description = entity.sectionDescription;
+      section.sectionDescription = entity.sectionDescription;
       // call service to save section...if successful, call close with new section as below
       this.activeModal.close(section);
     }
 
   }
   private populateForm(): void {
-    this.sectionTitle.setValue(this.editSection.title);
-    this.sectionDescription.setValue(this.editSection.description);
+    this.sectionTitle.setValue(this.editSection.sectionTitle);
+    this.sectionDescription.setValue(this.editSection.sectionDescription);
     this.sectionStory.setValue(this.editSection.story);
   }
 

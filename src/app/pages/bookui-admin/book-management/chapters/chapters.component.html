@@ -1,32 +1,28 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
 <nb-card class="inline-form-card">
 <nb-card-header>Book Management - Chapters</nb-card-header>
 <nb-card-body>
   <form class="form-inline">
     <div class="input-group full-width">
       <label class="input-group-addon">Book</label>
-      <select class="form-control">
-        <option>Minsk</option>
-        <option>Gomel</option>
-        <option>Brest</option>
-        <option>Grodno</option>
-        <option>Mogilev</option>
+      <select class="form-control" (change)="onChange($event)">
+        <option value="">Select Book</option>
+        <option [value]="book.bookId" *ngFor="let book of books"> {{ book.bookTitle }} </option>
       </select>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <!--<button type="submit" class="btn btn-primary">Submit</button>-->
   </form>
 </nb-card-body>
 </nb-card>
 
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info" *ngIf="book">
   <nb-card-header>
-    Book Management - Chapters
+    Chapters in {{ book.bookTitle }}
   </nb-card-header>
 
-  <nb-card-body>
+  <nb-card-body >
     <ng2-smart-table [settings]="settings" [source]="source"
                      (create)="onCreate($event)" (edit)="onEdit($event)" (delete)="onDelete($event)">
     </ng2-smart-table>
   </nb-card-body>
 </nb-card>
-  <toaster-container [toasterconfig]="toasterConfig"></toaster-container>
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
