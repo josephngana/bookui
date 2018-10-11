@@ -26,7 +26,7 @@ export class ChapterService {
     const url = this.chapterUrl + 'chapter/create';
     // const body = JSON.stingify(chapter);
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders())
-      .pipe(
+      .pipe( timeout(10000),
         // catchError(this.handleError('addChapter, chapter')),
       );
   }
@@ -48,6 +48,7 @@ export class ChapterService {
   deleteChapter(chapter: Chapter): Observable<Chapter> {
     const url = this.chapterUrl + 'chapter/delete';
     return this.http.post<Chapter>(url, chapter, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
       // catchError(this.handleError('deleteChapter', chapter)),
     );
   }

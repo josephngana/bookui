@@ -229,7 +229,6 @@ export class ChaptersComponent implements OnInit {
       console.error(error);
     });
   }
-
   private addNewChapter(chapter: Chapter): void {
     chapter.id = AppUtil.getId();
     this.motsepeSiteId;
@@ -238,14 +237,14 @@ export class ChaptersComponent implements OnInit {
     this.chapterService.addChapter(chapter).subscribe(savedChapter => {
         if (savedChapter) {
           this.chapters.push(chapter);
-          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book added!');
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'chapter added!');
         } else {
-          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT added!');
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'chapter NOT added!');
         }
       },
       error => {
         this.loading = false;
-        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Error adding book: ' + error.message);
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error adding chapter: ' + error.message);
         console.error();
       },
       () => {
