@@ -6,7 +6,7 @@
       <label class="input-group-addon">Book</label>
       <select class="form-control" (change)="onChange($event)">
         <option value="">Select Book</option>
-        <option [value]="book.id" *ngFor="let book of books"> {{ book.title }} </option>
+        <option [value]="book.bookId" *ngFor="let book of books"> {{ book.bookTitle }} </option>
       </select>
     </div>
     <!--<button type="submit" class="btn btn-primary">Submit</button>-->
@@ -16,7 +16,7 @@
 
 <nb-card [nbSpinner]="loading" nbSpinnerStatus="info" *ngIf="book">
   <nb-card-header>
-    Chapters in {{ book.title }}
+    Chapters in {{ book.bookTitle }}
   </nb-card-header>
 
   <nb-card-body >

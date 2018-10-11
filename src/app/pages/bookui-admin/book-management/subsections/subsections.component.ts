@@ -15,11 +15,11 @@ import {ToasterUtils} from '../../../../conf/util';
 
 @Component({
   selector: 'ngx-sub-sections',
-  templateUrl: './sub-sections.component.html',
-  styleUrls: ['./sub-sections.component.scss'],
+  templateUrl: './subsections.component.html',
+  styleUrls: ['./subsections.component.scss'],
   providers: [NgbModal],
 })
-export class SubSectionsComponent implements OnInit {
+export class SubsectionsComponent implements OnInit {
 loading: boolean;
 subsections: Array<SubSection>;
 source: LocalDataSource;
@@ -85,7 +85,7 @@ private toasterService: ToasterService;
       this.loading = true;
       setTimeout(() => {
       const subsectionId = subsection.id;
-      const filteredSubSections = this.subsections.filter( b => b.id !== subsectionId);
+      const filteredSubSections = this.subsections.filter( b => b.subsectionId !== subsectionId);
       this.subsections = filteredSubSections;
       this.source.load(this.subsections);
         this.loading = false;
@@ -122,8 +122,8 @@ private toasterService: ToasterService;
         setTimeout(() => {
         console.log(result);
         if (subsection) {
-          const subsectionId = subsection.id;
-          const filteredSubSections = this.subsections.filter( b => b.id !== subsectionId);
+          const subsectionId = subsection.subsectionId;
+          const filteredSubSections = this.subsections.filter( b => b.subsectionId !== subsectionId);
           this.subsections = filteredSubSections;
         }
         this.subsections.push(result);

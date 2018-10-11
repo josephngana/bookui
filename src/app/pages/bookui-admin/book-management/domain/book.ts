@@ -1,13 +1,14 @@
-import {BookBase} from './book-base';
-import {Chapter} from './chapter';
-import {Multimedia} from '../../../../shared/domain/multimedia';
 
-export class Book extends BookBase {
+export class Book {
   siteId: string;
-  isbn: string;
-  eisbn: string;
+  bookId: string;
+  bookTitle: string;
+  bookDescription: string = '';
+  story: string = '';
+  isbn: string = '';
+  eisbn: string = '';
   author: string;
   publisher: string;
   datePublished: Date;
-  chapterIds: Array<string> = [];
+  dateCreated: Date = new Date();
 }

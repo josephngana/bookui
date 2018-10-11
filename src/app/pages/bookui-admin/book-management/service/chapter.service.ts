@@ -33,8 +33,8 @@ export class ChapterService {
   /**
    * Get Chapter
    */
-  getChapters(chapterIds: string[]): Observable<Chapter[]> {
-    const url = this.chapterUrl + 'chapters/getforids/' + chapterIds.join();
+  getChapters(bookId: string): Observable<Chapter[]> {
+    const url = this.chapterUrl + 'chapters/getall/' + bookId;
     console.log(url);
     return this.http.get<Chapter[]>(url).pipe(
       timeout(10000),

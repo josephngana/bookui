@@ -134,25 +134,15 @@ export class ChaptersComponent implements OnInit {
   onChange(event): void {
     const bookId = event.srcElement.value;
     if (bookId !== '') {
-      this.getBook(bookId);
+      this.getChapters(bookId);
     } else {
       this.book = null;
     }
   }
 
-  private getBook(bookId: string): void {
-    this.book = this.books.filter(b => b.id === bookId)[0];
-    if (this.book) {
-      const chapterIds = this.book.chapterIds;
-      if (chapterIds.length > 0) {
-        this.getChapters(chapterIds);
-      }
-    }
-  }
-
-  private getChapters(chapterIds: string[]): void {
+  private getChapters(bookId: string): void {
     this.loading = true;
-    this.chapterService.getChapters(chapterIds).subscribe((chapters: Chapter[]) => {
+    this.chapterService.getChapters(bookId).subscribe((chapters: Chapter[]) => {
         if (chapters) {
           this.chapters = chapters;
           this.source = new LocalDataSource(this.chapters);
@@ -177,7 +167,7 @@ export class ChaptersComponent implements OnInit {
       this.loading = true;
       this.chapterService.deleteChapter(chapterToDelete).subscribe(isSuccess => {
           if (isSuccess) {
-            filteredChapters = this.chapters.filter(b => b.id !== chapterToDelete.id);
+            filteredChapters = this.chapters.filter(b => b.chapterId !== chapterToDelete.id);
             this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'Chapter deleted!');
           } else {
             this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Chapter NOT deleted!');
@@ -230,7 +220,7 @@ export class ChaptersComponent implements OnInit {
     });
   }
   private addNewChapter(chapter: Chapter): void {
-    chapter.id = AppUtil.getId();
+    chapter.chapterId = AppUtil.getId();
     this.motsepeSiteId;
     console.log(chapter);
     this.loading = true;
