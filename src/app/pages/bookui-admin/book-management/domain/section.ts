@@ -1,6 +1,9 @@
-import {BookBase} from './book-base';
-import {SubSection} from './sub-section';
 
-export class Section extends BookBase {
-  subSections: Array<SubSection> = [];
+export class Section {
+  chapterId: string;
+  sectionId: string;
+  sectionTitle: string;
+  sectionDescription: string = '';
+  story: string = '';
+  dateCreated: Date = new Date();
 }

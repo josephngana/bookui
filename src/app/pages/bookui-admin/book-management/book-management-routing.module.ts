@@ -4,7 +4,7 @@ import {BookManagementComponent} from './book-management.component';
 import {BooksComponent} from './books/books.component';
 import {ChaptersComponent} from './chapters/chapters.component';
 import {SectionsComponent} from './sections/sections.component';
-import {SubSectionsComponent} from './sub-sections/sub-sections.component';
+import {SubsectionsComponent} from './subsections/subsections.component';
 import {MultimediaComponent} from './multimedia/multimedia.component';
 
 const routes: Routes = [{
@@ -21,7 +21,7 @@ const routes: Routes = [{
     component: SectionsComponent,
   }, {
     path: 'subsections',
-    component: SubSectionsComponent,
+    component: SubsectionsComponent,
   }, {
     path: 'multimedia',
     component: MultimediaComponent,

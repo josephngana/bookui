@@ -50,7 +50,7 @@ export class BooksComponent implements OnInit {
       deleteButtonContent: '<i class="nb-trash"></i>',
     },
     columns: {
-      title: {
+      bookTitle: {
         title: 'Title',
         type: 'string',
       },
@@ -155,7 +155,7 @@ export class BooksComponent implements OnInit {
       this.loading = true;
       this.bookService.deleteBook(bookToDelete).subscribe(isSuccess => {
           if (isSuccess) {
-            filteredBooks = this.books.filter(b => b.id !== bookToDelete.id);
+            filteredBooks = this.books.filter(b => b.bookId !== bookToDelete.id);
             console.log('after deleting...', filteredBooks);
             this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book deleted!');
           } else {
@@ -240,9 +240,8 @@ export class BooksComponent implements OnInit {
 
   // adds new book
   private addNewBook(book: Book): void {
-    book.id = AppUtil.getId();
+    book.bookId = AppUtil.getId();
     book.siteId = this.motsepeSiteId;
-    console.log(book);
     this.loading = true;
     this.bookService.addBook(book).subscribe(savedBook => {
         if (savedBook) {

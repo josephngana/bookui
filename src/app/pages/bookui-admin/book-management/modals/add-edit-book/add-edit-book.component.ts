@@ -66,9 +66,9 @@ export class AddEditBookComponent implements OnInit {
       book.isbn = entity.bookIsbn;
       book.publisher = entity.bookPublisher;
       book.author = entity.bookAuthor;
-      book.title = entity.bookTitle;
+      book.bookTitle = entity.bookTitle;
       book.story = entity.bookStory;
-      book.description = entity.bookDescription;
+      book.bookDescription = entity.bookDescription;
       this.activeModal.close(book);
     }
 
@@ -79,10 +79,10 @@ export class AddEditBookComponent implements OnInit {
     this.bookDatePublished.setValue(this.formatToNgbDateStruct(this.editBook.datePublished));
     this.bookEisbn.setValue(this.editBook.eisbn);
     this.bookIsbn.setValue(this.editBook.isbn);
-    this.bookTitle.setValue(this.editBook.title);
+    this.bookTitle.setValue(this.editBook.bookTitle);
     this.bookAuthor.setValue(this.editBook.author);
     this.bookPublisher.setValue(this.editBook.publisher);
-    this.bookDescription.setValue(this.editBook.description);
+    this.bookDescription.setValue(this.editBook.bookDescription);
     this.bookStory.setValue(this.editBook.story);
   }
 

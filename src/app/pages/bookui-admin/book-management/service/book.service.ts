@@ -67,4 +67,15 @@ export class BookService {
      );
   }
 
+  /**
+   * Get a book given book id
+   * @param bookId
+   */
+  getBook(bookId: string): Observable<Book> {
+    const url = this.bookUrl + 'book/get/' + bookId;
+    return this.http.get<Book>(url).pipe(
+      timeout(10000),
+    );
+  }
+
 }
