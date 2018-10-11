@@ -42,16 +42,16 @@ export class AddEditSubsectionComponent implements OnInit {
   addSubSection(entity, isValid: boolean): void {
     if (isValid) {
       const subsection = new SubSection();
-      subsection.id = AppUtil.getId();
-      subsection.title = entity.subsectionTitle;
+      subsection.subsectionId = AppUtil.getId();
+      subsection.subsectionTitle = entity.subsectionTitle;
       subsection.story = entity.subsectionStory;
-      subsection.description = entity.subsectionDescription;
+      subsection.subsectionDescription = entity.subsectionDescription;
       this.activeModal.close(subsection);
     }
   }
   private populateForm(): void {
-    this.subsectionTitle.setValue(this.editSubSection.title);
-    this.subsectionDescription.setValue(this.editSubSection.description);
+    this.subsectionTitle.setValue(this.editSubSection.subsectionTitle);
+    this.subsectionDescription.setValue(this.editSubSection.subsectionDescription);
     this.subsectionStory.setValue(this.editSubSection.story);
   }
   onEditorChange(event): void {
