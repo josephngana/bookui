@@ -57,18 +57,29 @@ export class AddEditBookComponent implements OnInit {
     this.activeModal.close();
   }
 
-  addBook(entity, isValid: boolean): void {
+  addEditBook(entity, isValid: boolean): void {
     if (isValid) {
-      console.log(entity.bookStory, entity);
-      const book = new Book();
-      book.datePublished = this.formatToDate(entity.bookDatePublished);
-      book.eisbn = entity.bookEisbn;
-      book.isbn = entity.bookIsbn;
-      book.publisher = entity.bookPublisher;
-      book.author = entity.bookAuthor;
-      book.bookTitle = entity.bookTitle;
-      book.story = entity.bookStory;
-      book.bookDescription = entity.bookDescription;
+      let book = this.editBook;
+      if (book) {
+        book.datePublished = this.formatToDate(entity.bookDatePublished);
+        book.eisbn = entity.bookEisbn;
+        book.isbn = entity.bookIsbn;
+        book.publisher = entity.bookPublisher;
+        book.author = entity.bookAuthor;
+        book.bookTitle = entity.bookTitle;
+        book.story = entity.bookStory;
+        book.bookDescription = entity.bookDescription;
+      } else {
+        book = new Book();
+        book.datePublished = this.formatToDate(entity.bookDatePublished);
+        book.eisbn = entity.bookEisbn;
+        book.isbn = entity.bookIsbn;
+        book.publisher = entity.bookPublisher;
+        book.author = entity.bookAuthor;
+        book.bookTitle = entity.bookTitle;
+        book.story = entity.bookStory;
+        book.bookDescription = entity.bookDescription;
+      }
       this.activeModal.close(book);
     }
 
@@ -110,6 +121,7 @@ export class AddEditBookComponent implements OnInit {
   }
 
   private formatToNgbDateStruct(date: Date): NgbDateStruct {
+    date = new Date(date);
     const dateStruct: NgbDateStruct = {
       year: date.getFullYear(),
       month: date.getMonth() + 1,

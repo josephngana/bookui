@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2018.
  * Author: NicoleJestine.
- * Last Modified: 2018/10/08 15:25 PM
+ * Last Modified: 2018/10/10 14:55 PM
  */
 
 import { Injectable } from '@angular/core';
@@ -10,7 +10,7 @@ import {ErrorHandlerService, HandleError} from '../../../../shared/service/error
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Book} from '../domain/book';
-import {timeout} from 'rxjs/operators';
+import {catchError, timeout} from 'rxjs/operators';
 import {AppUtil} from '../../../../conf/app-util';
 
 @Injectable({
@@ -62,7 +62,9 @@ export class BookService {
   updateBook (book: Book): Observable<Book> {
     const url = this.bookUrl + 'book/update';
     return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
-      timeout(10000));
+      timeout(10000),
+    // catchError(this.handleError<any>('updateBook'))
+     );
   }
 
   /**
