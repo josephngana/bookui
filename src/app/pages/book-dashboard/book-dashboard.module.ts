@@ -7,6 +7,7 @@ import {SiteBookSummaryComponent} from './site-book-summary/site-book-summary.co
 import {BookSideComponent} from './site-book-card/book-side/book-side.component';
 import {SiteSideComponent} from './site-book-card/site-side/site-side.component';
 import {Ng2SmartTableModule} from 'ng2-smart-table';
+import {ToasterModule} from 'angular2-toaster';
 
 const components = [
   BookDashboardComponent,
@@ -22,6 +23,7 @@ const components = [
     CommonModule,
     ThemeModule,
     Ng2SmartTableModule,
+    ToasterModule.forRoot(),
   ],
   declarations: [...components],
 })

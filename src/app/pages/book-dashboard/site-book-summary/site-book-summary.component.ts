@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {BooksPerSite} from './domain/books-per-site';
+import {SiteBook} from './domain/site-book';
 
 @Component({
   selector: 'ngx-site-book-summary',
@@ -8,12 +8,18 @@ import {BooksPerSite} from './domain/books-per-site';
 })
 export class SiteBookSummaryComponent implements OnInit {
 
-  booksPerSite: BooksPerSite[];
+  booksPerSite: SiteBook[];
 
   constructor() { }
 
   ngOnInit() {
-    this.booksPerSite = [];
+    this.booksPerSite = [
+      new SiteBook('Motsepe Foundation', 20),
+      new SiteBook('Glory Foundation', 20),
+      new SiteBook('Nicole Foundation', 20),
+      new SiteBook('Keanu Foundation', 20),
+      new SiteBook('Joseph Foundation', 20),
+    ];
   }
 
 }
