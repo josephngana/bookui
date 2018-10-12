@@ -4,7 +4,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<form [formGroup]="addChapterForm" novalidate (ngSubmit)="addChapter(addChapterForm.value, addChapterForm.valid)">
+<form [formGroup]="addChapterForm" novalidate (ngSubmit)="addEditChapter(addChapterForm.value, addChapterForm.valid)">
   <div class="modal-body">
     <nb-card>
       <!--<nb-card-header>Basic form</nb-card-header>-->
@@ -23,7 +23,7 @@
         <div class="form-group">
           <label for="chapterStory">Story</label>
           <ngx-tiny-mce [formControl]="addChapterForm.controls['chapterStory']"
-                        id="chapterStory" ngDefaultControl></ngx-tiny-mce>
+                        id="chapterStory" (editorChange)="onEditorChange($event)" ngDefaultControl></ngx-tiny-mce>
         </div>
       </nb-card-body>
     </nb-card>

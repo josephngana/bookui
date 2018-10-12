@@ -34,14 +34,19 @@ export class AddEditChapterComponent implements OnInit {
   closeModal(): void {
     this.activeModal.close();
   }
-  addChapter(entity, isValid: boolean): void {
+  addEditChapter(entity, isValid: boolean): void {
     if (isValid) {
-      const chapter = new Chapter();
-      chapter.chapterId = AppUtil.getId();
-      chapter.chapterTitle = entity.chapterTitle;
-      chapter.chapterDescription = entity.chapterDescription;
-      chapter.story = entity.chapterStory;
-      // call service to save book...if successful, call close with new book as below
+      let chapter = this.editChapter;
+      if (chapter) {
+        chapter.chapterTitle = entity.chapterTitle;
+        chapter.chapterDescription = entity.chapterDescription;
+        chapter.story = entity.chapterStory;
+      } else {
+        chapter = new Chapter();
+        chapter.chapterTitle = entity.chapterTitle;
+        chapter.chapterDescription = entity.chapterDescription;
+        chapter.story = entity.chapterStory;
+      }
       this.activeModal.close(chapter);
     }
   }

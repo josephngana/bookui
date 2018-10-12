@@ -17,7 +17,9 @@ export class SiteService {
 
   getSites(): Observable<Site[]> {
     const url = this.siteUrl + 'getall';
-    return this.http.get<Site[]>(url).pipe();
+    return this.http.get<Site[]>(url).pipe(
+      timeout(3000),
+    );
   }
 
   saveSite(site: Site): Observable<Site> {

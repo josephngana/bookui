@@ -191,15 +191,7 @@ export class RolesComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
-    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
-    const toast: Toast = {
-      type: type,
-      title: title,
-      body: info,
-      timeout: ToasterUtils.TIMEOUT,
-      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
+    const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }
 

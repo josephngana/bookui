@@ -4,8 +4,8 @@ import { SiteSideComponent } from './site-side.component';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
-  declarations: [SiteSideComponent]
+  declarations: [SiteSideComponent],
 })
 export class SiteSideModule { }

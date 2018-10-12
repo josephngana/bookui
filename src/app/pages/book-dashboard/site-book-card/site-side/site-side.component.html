@@ -6,6 +6,7 @@
     <span class="title">Sites</span>
   </div>
 </nb-card-header>
-<nb-card-body>
+<nb-card-body [nbSpinner]="loading" nbSpinnerStatus="info">
   <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>
 </nb-card-body>
+<toaster-container [toasterconfig]="toasterConfig"></toaster-container>
