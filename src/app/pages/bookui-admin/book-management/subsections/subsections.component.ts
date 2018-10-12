@@ -12,6 +12,7 @@ import {AddEditSubsectionComponent} from '../modals/add-edit-subsection/add-edit
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
+import {AppUtil} from '../../../../conf/app-util';
 
 @Component({
   selector: 'ngx-sub-sections',
@@ -137,15 +138,7 @@ private toasterService: ToasterService;
     });
   }
   private showInformation(type: string, title: string, info: string): void {
-    type = (type === null || type === '') ? ToasterUtils.TOAST_TYPE.default : type;
-    const toast: Toast = {
-      type: type,
-      title: title,
-      body: info,
-      timeout: ToasterUtils.TIMEOUT,
-      showCloseButton: ToasterUtils.SHOW_CLOSE_BUTTON,
-      bodyOutputType: BodyOutputType.TrustedHtml,
-    };
+    const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }
 
