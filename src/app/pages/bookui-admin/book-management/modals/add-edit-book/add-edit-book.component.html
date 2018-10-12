@@ -4,7 +4,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<form [formGroup]="addBookForm" novalidate (ngSubmit)="addBook(addBookForm.value, addBookForm.valid)">
+<form [formGroup]="addBookForm" novalidate (ngSubmit)="addEditBook(addBookForm.value, addBookForm.valid)">
   <div class="modal-body">
     <nb-card>
       <!--<nb-card-header>Basic form</nb-card-header>-->
