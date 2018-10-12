@@ -177,7 +177,7 @@ export class ChaptersComponent implements OnInit {
       this.loading = true;
       this.chapterService.deleteChapter(chapterToDelete).subscribe(isSuccess => {
           if (isSuccess) {
-            filteredChapters = this.chapters.filter(b => b.chapterId !== chapterToDelete.id);
+            filteredChapters = this.chapters.filter(b => b.chapterId !== chapterToDelete.chapterId);
             this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'Chapter deleted!');
           } else {
             this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Chapter NOT deleted!');
