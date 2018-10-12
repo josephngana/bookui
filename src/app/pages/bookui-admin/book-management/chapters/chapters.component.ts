@@ -24,6 +24,7 @@ export class ChaptersComponent implements OnInit {
   source: LocalDataSource;
   motsepeSiteId: string;
   book: Book;
+  bookId: string;
   books: Array<Book>;
   chapters: Array<Chapter>;
 
@@ -58,11 +59,11 @@ export class ChaptersComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      title: {
+      chapterTitle: {
         title: 'Title',
         type: 'string',
       },
-      description: {
+      chapterDescription: {
         title: 'Description',
         type: 'string',
       },
@@ -134,9 +135,18 @@ export class ChaptersComponent implements OnInit {
   onChange(event): void {
     const bookId = event.srcElement.value;
     if (bookId !== '') {
-      this.getChapters(bookId);
+      this.getBook(bookId);
     } else {
       this.book = null;
+    }
+  }
+
+  private getBook(bookId: string): void {
+    const book = this.books.filter( b => b.bookId === bookId)[0];
+    if (book) {
+      this.bookId = bookId;
+      this.book = book;
+      this.getChapters(bookId);
     }
   }
 
@@ -209,7 +219,7 @@ export class ChaptersComponent implements OnInit {
       if (c) {
         if (chapter) {
           // call method to process edit
-          // this.
+          this.updatingChapter(c);
         } else {
           // call method to process add
           this.addNewChapter(c);
@@ -219,10 +229,32 @@ export class ChaptersComponent implements OnInit {
       console.error(error);
     });
   }
+  // updating chapter
+  private updatingChapter(chapter: Chapter): void {
+    let filteredChapters = this.chapters;
+    this.loading = true;
+    this.chapterService.updateChapter(chapter).subscribe(editchapter => {
+      if (editchapter) {
+        filteredChapters = this.chapters.filter(c => c.chapterId !== chapter.chapterId);
+        filteredChapters.push(editchapter);
+        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Chapter', 'Chapter updated!');
+      } else {
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Chapter NOT updated!');
+      }
+    }, error => {
+        this.loading = false;
+        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Chapter', 'Error adding chapter: ' + error.message);
+        console.error();
+      },
+      () => {
+        this.loading = false;
+        this.source.load(this.chapters);
+      });
+  }
+  // adds new chapter
   private addNewChapter(chapter: Chapter): void {
     chapter.chapterId = AppUtil.getId();
-    this.motsepeSiteId;
-    console.log(chapter);
+    chapter.bookId = this.bookId;
     this.loading = true;
     this.chapterService.addChapter(chapter).subscribe(savedChapter => {
         if (savedChapter) {
