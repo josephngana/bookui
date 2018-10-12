@@ -40,10 +40,12 @@ export class AddEditChapterComponent implements OnInit {
       if (chapter) {
         chapter.chapterTitle = entity.chapterTitle;
         chapter.chapterDescription = entity.chapterDescription;
+        chapter.story = entity.chapterStory;
       } else {
         chapter = new Chapter();
         chapter.chapterTitle = entity.chapterTitle;
         chapter.chapterDescription = entity.chapterDescription;
+        chapter.story = entity.chapterStory;
       }
       this.activeModal.close(chapter);
     }
