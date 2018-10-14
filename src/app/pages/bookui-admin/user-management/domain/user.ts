@@ -1,6 +1,5 @@
 export class User {
   siteId: string;
-  siteName: string;
   userId: string;
   firstName: string;
   middleName: string = '';

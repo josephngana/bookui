@@ -11,29 +11,35 @@ import {timeout} from 'rxjs/operators';
 })
 export class SiteService {
 
-  siteUrl = SERVICE_BASE_URL + 'sites/';
+  private siteUrl = SERVICE_BASE_URL + 'sites/';
 
   constructor(private http: HttpClient) { }
 
   getSites(): Observable<Site[]> {
     const url = this.siteUrl + 'getall';
     return this.http.get<Site[]>(url).pipe(
-      timeout(3000),
+      timeout(10000),
     );
   }
 
   saveSite(site: Site): Observable<Site> {
     const url = this.siteUrl + 'create';
-    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe();
+    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
+      );
   }
 
   updateSite(site: Site): Observable<Site> {
     const url = this.siteUrl + 'update';
-    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe();
+    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
+      );
   }
 
   deleteSite(site: Site): Observable<Site> {
     const url = this.siteUrl + 'delete';
-    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe();
+    return this.http.post<Site>(url, site, AppUtil.getHttpHeaders()).pipe(
+      timeout(10000),
+      );
   }
 }

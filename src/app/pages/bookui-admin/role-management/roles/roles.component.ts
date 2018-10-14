@@ -6,6 +6,8 @@ import {LocalDataSource} from 'ng2-smart-table';
 import {ToasterUtils} from '../../../../conf/util';
 import {RoleService} from '../service/role.service';
 
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-roles',
   templateUrl: './roles.component.html',
@@ -17,18 +19,7 @@ export class RolesComponent implements OnInit {
   loading: boolean;
   source: LocalDataSource;
   roles: Array<Role>;
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
+  toasterConfig: ToasterConfig;
 
   settings = {
     add: {
@@ -59,23 +50,20 @@ export class RolesComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService, private roleService: RoleService) {
-    this.toasterService = toasterService;
+  constructor(private toasterService: ToasterService, private roleService: RoleService) {
   }
 
   ngOnInit() {
-    this.roles = [];
     this.getRoles();
-    this.source = new LocalDataSource(this.roles);
   }
 
   private getRoles(): void {
     this.loading = true;
     this.roleService.getRoles().subscribe((roles: Role[]) => {
+        this.roles = [];
         if (roles) {
           this.roles = roles;
           this.source = new LocalDataSource(this.roles);
-          // this.loading = false;
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Role', 'No roles retrieved.');
         }
@@ -191,6 +179,7 @@ export class RolesComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }

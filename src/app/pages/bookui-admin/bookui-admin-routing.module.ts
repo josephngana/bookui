@@ -17,6 +17,9 @@ const routes: Routes = [{
   }, {
     path: 'site-management',
     loadChildren: './site-management/site-management.module#SiteManagementModule',
+  }, {
+    path: 'multimedia-management',
+    loadChildren: './multimedia-management/multimedia-management.module#MultimediaManagementModule',
   }],
 }];
 

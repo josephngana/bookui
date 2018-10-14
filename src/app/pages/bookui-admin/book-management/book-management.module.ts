@@ -6,7 +6,6 @@ import {BooksModule} from './books/books.module';
 import {ChaptersModule} from './chapters/chapters.module';
 import {SectionsModule} from './sections/sections.module';
 import {SubsectionsModule} from './subsections/subsections.module';
-import {MultimediaModule} from './multimedia/multimedia.module';
 import {AddEditBookComponent} from './modals/add-edit-book/add-edit-book.component';
 import {AddEditSectionComponent} from './modals/add-edit-section/add-edit-section.component';
 import {AddEditChapterComponent} from './modals/add-edit-chapter/add-edit-chapter.component';
@@ -28,7 +27,6 @@ const components = [
     ChaptersModule,
     SectionsModule,
     SubsectionsModule,
-    MultimediaModule,
   ],
   declarations: [
     ...components,

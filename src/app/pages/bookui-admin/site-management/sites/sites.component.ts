@@ -7,6 +7,8 @@ import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toa
 import {ToasterUtils} from '../../../../conf/util';
 import {SiteService} from '../service/site.service';
 
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-sites',
   templateUrl: './sites.component.html',
@@ -15,25 +17,10 @@ import {SiteService} from '../service/site.service';
 })
 export class SitesComponent implements OnInit {
 
-
   sites: Site[];
   source: LocalDataSource;
   loading: boolean;
-
-
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
-
+  toasterConfig: ToasterConfig;
 
   settings = {
     noDataMessage: 'No sites',
@@ -74,26 +61,26 @@ export class SitesComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService, private siteService: SiteService) {
-    this.toasterService = toasterService;
+  constructor(private toasterService: ToasterService, private siteService: SiteService) {
   }
 
   ngOnInit() {
-    this.sites = [];
     this.getSites();
-    this.source = new LocalDataSource(this.sites);
   }
 
+  /**
+   * Get all sites
+   */
   private getSites(): void {
     this.loading = true;
     this.siteService.getSites().subscribe(sites => {
-        console.log(sites);
+        this.sites = [];
         if (this.sites) {
           this.sites = sites;
-          this.source = new LocalDataSource(this.sites);
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Site', 'Could not retrieve sites!');
         }
+        this.source = new LocalDataSource(this.sites);
       },
       error => {
         this.loading = false;
@@ -104,6 +91,10 @@ export class SitesComponent implements OnInit {
       });
   }
 
+  /**
+   * Delete a site
+   * @param event
+   */
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
       this.loading = true;
@@ -129,10 +120,13 @@ export class SitesComponent implements OnInit {
 
   }
 
+  /**
+   * Create a site
+   * @param event
+   */
   onCreateConfirm(event): void {
     const newSite = event.newData;
     const siteName = newSite.siteName;
-    console.log(newSite, siteName);
     if (siteName === '') {
       this.showInformation(ToasterUtils.TOAST_TYPE.info, 'Site', 'Site name is required!');
     } else {
@@ -160,18 +154,22 @@ export class SitesComponent implements OnInit {
     }
   }
 
+  /**
+   * Update/edit a site
+   * @param event
+   */
   onEditConfirm(event): void {
     const newSite = event.newData;
     this.loading = true;
-    this.siteService.updateSite(newSite).subscribe( site => {
-      if (site) {
-        this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Site', 'Site updated!');
-        event.confirm.resolve(site);
-      } else {
-        this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Site', 'Site NOT updated!');
-        event.confirm.reject();
-      }
-    },
+    this.siteService.updateSite(newSite).subscribe(site => {
+        if (site) {
+          this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Site', 'Site updated!');
+          event.confirm.resolve(site);
+        } else {
+          this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Site', 'Site NOT updated!');
+          event.confirm.reject();
+        }
+      },
       error => {
         this.loading = false;
         this.showInformation(ToasterUtils.TOAST_TYPE.error, 'Site', 'An error occurred: ' + error.message);
@@ -188,6 +186,7 @@ export class SitesComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }

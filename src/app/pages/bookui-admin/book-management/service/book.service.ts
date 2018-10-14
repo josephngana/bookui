@@ -4,7 +4,7 @@
  * Last Modified: 2018/10/10 14:55 PM
  */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {SERVICE_BASE_URL} from '../../../../conf/util';
 import {ErrorHandlerService, HandleError} from '../../../../shared/service/error-handler.service';
 import {HttpClient} from '@angular/common/http';
@@ -27,14 +27,14 @@ export class BookService {
   }
 
   /**
-   * Get Books
+   * Get Books in site
    */
   getBooks(siteId: String): Observable<Book[]> {
     const url = this.bookUrl + 'getall/' + siteId;
     return this.http.get<Book[]>(url).pipe(
-      timeout( 10000),
+      timeout(10000),
     );
-}
+  }
 
   /**
    * Create/Add Book
@@ -53,18 +53,18 @@ export class BookService {
     const url = this.bookUrl + 'book/delete';
     return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
       timeout(10000),
-      );
+    );
   }
 
   /**
    * Update a book
    */
-  updateBook (book: Book): Observable<Book> {
+  updateBook(book: Book): Observable<Book> {
     const url = this.bookUrl + 'book/update';
     return this.http.post<Book>(url, book, AppUtil.getHttpHeaders()).pipe(
       timeout(10000),
-    // catchError(this.handleError<any>('updateBook'))
-     );
+      // catchError(this.handleError<any>('updateBook'))
+    );
   }
 
   /**
@@ -78,4 +78,13 @@ export class BookService {
     );
   }
 
+  /**
+   * get all books
+   */
+  getAll(): Observable<Book[]> {
+    const url = SERVICE_BASE_URL + 'books/getall';
+    return this.http.get<Book[]>(url).pipe(
+      timeout(10000),
+    );
+  }
 }

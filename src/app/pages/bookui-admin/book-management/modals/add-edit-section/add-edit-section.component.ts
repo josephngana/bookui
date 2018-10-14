@@ -3,6 +3,7 @@ import {NgbActiveModal, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Section} from '../../domain/section';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AppUtil} from '../../../../../conf/app-util';
+import {Chapter} from '../../domain/chapter';
 
 @Component({
   selector: 'ngx-add-edit-section',
@@ -42,12 +43,13 @@ export class AddEditSectionComponent implements OnInit {
   }
   addSection(entity, isValid: boolean): void {
     if (isValid) {
-      const section = new Section();
-      section.sectionId = AppUtil.getId();
+      let section = this.editSection;
+      if (!section) {
+        section = new Section();
+      }
       section.sectionTitle = entity.sectionTitle;
       section.story = entity.sectionStory;
       section.sectionDescription = entity.sectionDescription;
-      // call service to save section...if successful, call close with new section as below
       this.activeModal.close(section);
     }
 

@@ -53,6 +53,9 @@ export class SiteSideComponent implements OnInit {
         width: '20%',
       },
     },
+    pager: {
+      perPage: 10,
+    },
   };
 
   constructor(private siteService: SiteService,
