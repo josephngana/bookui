@@ -11,17 +11,15 @@ import {AppUtil} from '../../../../../conf/app-util';
 })
 export class AddEditSubsectionComponent implements OnInit {
 
-  @Input() editSubSection: SubSection;
+  @Input() editSubsection: SubSection;
   @Input() header: string;
+
   public addSubSectionForm: FormGroup;
   public subsectionTitle: AbstractControl;
   public subsectionDescription: AbstractControl;
   public subsectionStory: AbstractControl;
-  constructor(private builder: FormBuilder, private activeModal: NgbActiveModal) { }
 
-  /**
-   * working on the ngOnInit
-   */
+  constructor(private builder: FormBuilder, private activeModal: NgbActiveModal) { }
 
   ngOnInit() {
     this.addSubSectionForm = this.builder.group({
@@ -32,7 +30,8 @@ export class AddEditSubsectionComponent implements OnInit {
     this.subsectionTitle = this.addSubSectionForm.controls['subsectionTitle'];
     this.subsectionDescription = this.addSubSectionForm.controls['subsectionDescription'];
     this.subsectionStory = this.addSubSectionForm.controls['subsectionStory'];
-    if (this.editSubSection) {
+
+    if (this.editSubsection) {
       this.populateForm();
     }
   }
@@ -41,8 +40,10 @@ export class AddEditSubsectionComponent implements OnInit {
   }
   addSubSection(entity, isValid: boolean): void {
     if (isValid) {
-      const subsection = new SubSection();
-      subsection.subsectionId = AppUtil.getId();
+      let subsection = this.editSubsection;
+      if (!subsection) {
+        subsection = new SubSection();
+      }
       subsection.subsectionTitle = entity.subsectionTitle;
       subsection.story = entity.subsectionStory;
       subsection.subsectionDescription = entity.subsectionDescription;
@@ -50,9 +51,9 @@ export class AddEditSubsectionComponent implements OnInit {
     }
   }
   private populateForm(): void {
-    this.subsectionTitle.setValue(this.editSubSection.subsectionTitle);
-    this.subsectionDescription.setValue(this.editSubSection.subsectionDescription);
-    this.subsectionStory.setValue(this.editSubSection.story);
+    this.subsectionTitle.setValue(this.editSubsection.subsectionTitle);
+    this.subsectionDescription.setValue(this.editSubsection.subsectionDescription);
+    this.subsectionStory.setValue(this.editSubsection.story);
   }
   onEditorChange(event): void {
     this.subsectionStory.setValue(event);

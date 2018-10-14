@@ -1,36 +1,29 @@
-<nb-card [nbSpinner]="loading" nbSpinnerStatus="info">
 <nb-card class="inline-form-card">
   <nb-card-header>Book Management - Sections</nb-card-header>
   <nb-card-body>
     <form class="form-inline">
       <div class="input-group full-width">
         <label class="input-group-addon">Book</label>
-        <select class="form-control">
-          <option>Minsk</option>
-          <option>Gomel</option>
-          <option>Brest</option>
-          <option>Grodno</option>
-          <option>Mogilev</option>
+        <select class="form-control" (change)="onBookChange($event)">
+          <option value="">Select Book</option>
+          <option [value]="book.bookId" *ngFor="let book of books"> {{ book.bookTitle }} </option>
         </select>
       </div>
-      <div class="input-group full-width">
+      <div class="input-group full-width" *ngIf="selectedBook">
         <label class="input-group-addon">Chapter</label>
-        <select class="form-control">
-          <option>Minsk</option>
-          <option>Gomel</option>
-          <option>Brest</option>
-          <option>Grodno</option>
-          <option>Mogilev</option>
+        <select class="form-control" (change)="onChapterChange($event)">
+          <option value="">Select Chapter in {{selectedBook.bookTitle}}</option>
+          <option [value]="chapter.chapterId" *ngFor="let chapter of chapters"> {{ chapter.chapterTitle }} </option>
         </select>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <!--<button type="submit" class="btn btn-primary">Submit</button>-->
     </form>
   </nb-card-body>
 </nb-card>
 
-<nb-card>
+<nb-card [nbSpinner]="loading" nbSpinnerStatus="info" *ngIf="selectedBook && selectedChapter">
   <nb-card-header>
-    Sections for {{ chapter }} in {{ book }}
+    Sections for <em>{{ selectedChapter.chapterTitle }}</em> in <em>{{ selectedBook.bookTitle }}</em>
   </nb-card-header>
 
   <nb-card-body>

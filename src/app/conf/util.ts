@@ -1,4 +1,6 @@
 
+import {ToasterConfig} from 'angular2-toaster';
+
 export const SERVICE_BASE_URL = 'http://155.238.32.101:9000/';
 // export const SERVICE_BASE_URL = 'http://localhost:9000/';
 
@@ -30,4 +32,15 @@ export class ToasterUtils {
     slideDown: 'slideDown',
     slideUp: 'slideUp',
   };
+
+  // toaster configuration
+  static TOASTER_CONFIG: ToasterConfig = new ToasterConfig({
+    positionClass: ToasterUtils.POSITION_CLASS,
+    timeout: ToasterUtils.TIMEOUT,
+    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
+    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
+    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
+    animation: ToasterUtils.ANIMATION_TYPE.fade,
+    limit: ToasterUtils.LIMIT,
+  });
 }

@@ -18,6 +18,7 @@ export class PagesComponent implements OnInit {
   userMgtMenu: NbMenuItem;
   siteMgtMenu: NbMenuItem;
   bookMgtMenu: NbMenuItem;
+  multimediaMgtMenu: NbMenuItem;
 
   // personal menus
   personalMenuGroup: NbMenuItem;
@@ -33,12 +34,14 @@ export class PagesComponent implements OnInit {
     this.userMgtMenu = this.populateUserMgtMenu();
     this.siteMgtMenu = this.populateSiteMgtMenu();
     this.bookMgtMenu = this.populateBookMgtMenu();
+    this.multimediaMgtMenu = this.populateMultimediaMgtMenu();
 
     if (this.isLoggedIn) this.menu.splice(++start, 0, this.mgtMenuGroup);
     if (this.isLoggedIn) this.menu.splice(++start, 0, this.roleMgtMenu);
     if (this.isLoggedIn) this.menu.splice(++start, 0, this.userMgtMenu);
     if (this.isLoggedIn) this.menu.splice(++start, 0, this.siteMgtMenu);
     if (this.isLoggedIn) this.menu.splice(++start, 0, this.bookMgtMenu);
+    if (this.isLoggedIn) this.menu.splice(++start, 0, this.multimediaMgtMenu);
 
     this.personalMenuGroup = this.populatePersonalMenuGroup();
     this.authMenu = this.populateAuthMenu();
@@ -127,9 +130,19 @@ export class PagesComponent implements OnInit {
           title: 'Subsections',
           link: '/bookui/admin/book-management/subsections',
         },
+      ],
+    };
+  }
+
+  private populateMultimediaMgtMenu(): NbMenuItem {
+    return {
+      title: 'Multimedia Management',
+      icon: 'nb-star',
+      link: '/bookui/admin/multimedia-management',
+      children: [
         {
           title: 'Multimedia',
-          link: '/bookui/admin/book-management/multimedia',
+          link: '/bookui/admin/multimedia-management/multimedia',
         },
       ],
     };

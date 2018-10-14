@@ -10,6 +10,8 @@ import {SiteService} from '../../site-management/service/site.service';
 import {BookService} from '../service/book.service';
 import {AppUtil} from '../../../../conf/app-util';
 
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-books',
   templateUrl: './books.component.html',
@@ -21,20 +23,10 @@ export class BooksComponent implements OnInit {
   loading: boolean;
   source: LocalDataSource;
   books: Array<Book>;
-  motsepeSiteId;
-  private toasterService: ToasterService;
+  motsepeSiteId: string;
+  toasterConfig: ToasterConfig;
 
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
-// settings for smart table
+  // settings for smart table
   settings = {
     mode: 'external',
     add: {
@@ -88,20 +80,20 @@ export class BooksComponent implements OnInit {
         },
       },
     },
+    pager: {
+      perPage: 10,
+    },
   };
 
   constructor(private modalService: NgbModal,
-              toasterService: ToasterService,
+              private toasterService: ToasterService,
               private siteService: SiteService,
               private bookService: BookService,
   ) {
-    this.toasterService = toasterService;
   }
 
   ngOnInit() {
     this.getMotsepeSiteId();
-    this.books = [];
-    this.source = new LocalDataSource(this.books);
   }
 
   private getMotsepeSiteId(): void {
@@ -127,12 +119,13 @@ export class BooksComponent implements OnInit {
   private getBooks(): void {
     this.loading = true;
     this.bookService.getBooks(this.motsepeSiteId).subscribe((books: Book[]) => {
+        this.books = [];
         if (books) {
           this.books = books;
-          this.source = new LocalDataSource(this.books);
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'No books retrieve.');
         }
+        this.source = new LocalDataSource(this.books);
       },
       error => {
         this.loading = false;
@@ -205,7 +198,7 @@ export class BooksComponent implements OnInit {
       if (b) {
         if (book) {
           // call method to process edit
-           this.updateExistingBook(b);
+          this.updateExistingBook(b);
         } else {
           // call method to process add
           this.addNewBook(b);
@@ -220,7 +213,7 @@ export class BooksComponent implements OnInit {
   private updateExistingBook(book: Book): void {
     let filteredBooks = this.books;
     this.loading = true;
-    this.bookService.updateBook(book).subscribe( editBook => {
+    this.bookService.updateBook(book).subscribe(editBook => {
         if (editBook) {
           filteredBooks = this.books.filter(b => b.bookId !== book.bookId);
           filteredBooks.push(editBook);
@@ -247,7 +240,7 @@ export class BooksComponent implements OnInit {
     this.loading = true;
     this.bookService.addBook(book).subscribe(savedBook => {
         if (savedBook) {
-          this.books.push(book);
+          this.books.push(savedBook);
           this.showInformation(ToasterUtils.TOAST_TYPE.success, 'Book', 'Book added!');
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, 'Book', 'Book NOT added!');
@@ -271,6 +264,7 @@ export class BooksComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }

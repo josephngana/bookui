@@ -1,15 +1,10 @@
-/**
- * @author: caniksea
- * @date: September 27, 2018.
- */
-
 import { Component, OnInit } from '@angular/core';
 import {LocalDataSource} from 'ng2-smart-table';
-import {Multimedia} from '../../../../shared/domain/multimedia';
-import {DatePipe} from '@angular/common';
-import {AppUtil} from '../../../../conf/app-util';
-import {BodyOutputType, Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
+import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
+import {DatePipe} from '@angular/common';
+import {Multimedia} from '../../../../shared/domain/multimedia';
+import {AppUtil} from '../../../../conf/app-util';
 
 import 'style-loader!angular2-toaster/toaster.css';
 
@@ -22,18 +17,7 @@ export class MultimediaComponent implements OnInit {
 
   loading: boolean;
   source: LocalDataSource;
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-      positionClass: ToasterUtils.POSITION_CLASS,
-      timeout: ToasterUtils.TIMEOUT,
-      newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-      tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-      preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-      animation: ToasterUtils.ANIMATION_TYPE.fade,
-      limit: ToasterUtils.LIMIT,
-    });
+  toasterConfig: ToasterConfig;
 
   // settings for smart table
   settings = {
@@ -82,8 +66,7 @@ export class MultimediaComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService) {
-    this.toasterService = toasterService;
+  constructor(private toasterService: ToasterService) {
   }
 
   ngOnInit() {
@@ -152,9 +135,9 @@ export class MultimediaComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }
-
 
 }

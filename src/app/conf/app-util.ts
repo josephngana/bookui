@@ -24,7 +24,7 @@ export class AppUtil {
     const httpOptions = {
       headers : new HttpHeaders({
         'Content-Type': 'application/json',
-      })
+      }),
     };
     return httpOptions;
   }

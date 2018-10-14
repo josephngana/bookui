@@ -15,6 +15,8 @@ import {ToasterUtils} from '../../../../conf/util';
 import {SiteService} from '../../site-management/service/site.service';
 import {UserService} from '../service/user.service';
 
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-users',
   templateUrl: './users.component.html',
@@ -27,20 +29,8 @@ export class UsersComponent implements OnInit {
   loading: boolean;
   source: LocalDataSource;
   users: User[];
-  sites: Array<Site>;
-
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
+  sites: Site[];
+  toasterConfig: ToasterConfig;
 
   settings = {
     noDataMessage: 'No users',
@@ -81,7 +71,7 @@ export class UsersComponent implements OnInit {
       confirmDelete: true,
     },
     columns: {
-      siteName: {
+      siteId: {
         title: 'Site Name',
         type: 'html',
         editor: {
@@ -90,6 +80,9 @@ export class UsersComponent implements OnInit {
             selectText: 'Select Site',
             list: [],
           },
+        },
+        valuePrepareFunction: (siteId) => {
+          return this.getSiteName(siteId);
         },
       },
       firstName: {
@@ -124,17 +117,14 @@ export class UsersComponent implements OnInit {
     },
   };
 
-  constructor(toasterService: ToasterService,
+  constructor(private toasterService: ToasterService,
               private siteService: SiteService,
               private userService: UserService,
   ) {
-    this.toasterService = toasterService;
   }
 
   ngOnInit() {
     this.getSites();
-
-    this.users = [];
   }
 
   /**
@@ -143,11 +133,12 @@ export class UsersComponent implements OnInit {
   private getSites(): void {
     this.loading = true;
     this.siteService.getSites().subscribe(sites => {
+        this.sites = [];
         if (sites) {
           this.sites = sites;
           const siteDropdown = this.populateSiteDropDown();
 
-          this.mySettings.columns.siteName.editor.config.list = siteDropdown;
+          this.mySettings.columns.siteId.editor.config.list = siteDropdown;
           this.settings = Object.assign({}, this.mySettings);
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Could not retrieve sites!');
@@ -169,9 +160,9 @@ export class UsersComponent implements OnInit {
   private getUsers(): void {
     this.loading = true;
     this.userService.getUsers().subscribe(users => {
+        this.users = [];
         if (users) {
           this.users = users;
-          this.users.forEach(user => user.siteName = this.getSiteName(user.siteId));
           this.source = new LocalDataSource(this.users);
         } else {
           this.showInformation(ToasterUtils.TOAST_TYPE.warning, this.domain, 'Could not retrieve users!');
@@ -217,7 +208,7 @@ export class UsersComponent implements OnInit {
    */
   onCreateConfirm(event): void {
     const newUser = event.newData;
-    const siteId = newUser.siteName;
+    const siteId = newUser.siteId;
     const email = newUser.email;
     const firstName = newUser.firstName;
     const lastName = newUser.lastName;
@@ -227,7 +218,6 @@ export class UsersComponent implements OnInit {
         const user = this.buildUser(newUser);
         this.userService.saveUser(user).subscribe(u => {
             if (u) {
-              u.siteName = this.getSiteName(u.siteId);
               event.confirm.resolve(u);
               this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User added!');
             } else {
@@ -259,7 +249,7 @@ export class UsersComponent implements OnInit {
     user.lastName = newUser.lastName;
     user.middleName = newUser.middleName;
     user.email = newUser.email;
-    user.siteId = newUser.siteName;
+    user.siteId = newUser.siteId;
     return user;
   }
 
@@ -269,7 +259,7 @@ export class UsersComponent implements OnInit {
    */
   onEditConfirm(event): void {
     const editedUser = event.newData;
-    const siteId = editedUser.siteName;
+    const siteId = editedUser.siteId;
     const email = editedUser.email;
     const firstName = editedUser.firstName;
     const lastName = editedUser.lastName;
@@ -278,7 +268,6 @@ export class UsersComponent implements OnInit {
         this.loading = true;
         this.userService.updateUser(editedUser).subscribe(user => {
             if (user) {
-              user.siteName = this.getSiteName(user.siteId);
               event.confirm.resolve(user);
               this.showInformation(ToasterUtils.TOAST_TYPE.success, this.domain, 'User updated!');
             } else {
@@ -335,6 +324,7 @@ export class UsersComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }
