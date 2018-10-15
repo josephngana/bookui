@@ -11,6 +11,7 @@ import {
 
 const routes: Routes = [
   { path: 'bookui', loadChildren: 'app/pages/pages.module#PagesModule' },
+  { path: 'bookui-read', loadChildren: 'app/fronts/fronts.module#FrontsModule' },
   // {
   //   path: 'auth',
   //   component: NbAuthComponent,
