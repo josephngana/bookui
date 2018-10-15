@@ -5,8 +5,9 @@ import {BookService} from '../../../bookui-admin/book-management/service/book.se
 import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
 import {Book} from '../../../bookui-admin/book-management/domain/book';
-import {SiteService} from '../../../bookui-admin/site-management/service/site.service';
 import {AppUtil} from '../../../../conf/app-util';
+import {DataTransferService} from '../../../../shared/service/data-transfer.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'ngx-book-side',
@@ -19,19 +20,7 @@ export class BookSideComponent implements OnInit {
   source: LocalDataSource;
   books: Book[];
   loading: boolean;
-
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
+  toasterConfig: ToasterConfig;
 
   // settings for smart table
   settings = {
@@ -68,8 +57,9 @@ export class BookSideComponent implements OnInit {
   };
 
   constructor(private bookService: BookService,
-              toasterService: ToasterService) {
-    this.toasterService = toasterService;
+              private toasterService: ToasterService,
+              private dataTransferService: DataTransferService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -103,7 +93,14 @@ export class BookSideComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
+  }
+
+  private onRowSelect(event): void {
+    const book: Book = event.data;
+    this.dataTransferService.setBookId(book);
+    this.router.navigate(['/bookui-read/book']);
   }
 }

@@ -43,7 +43,7 @@ import {
 } from './pipes';
 import {
   OneColumnLayoutComponent,
-  // SampleLayoutComponent,
+  SampleLayoutComponent,
   // ThreeColumnsLayoutComponent,
   // TwoColumnsLayoutComponent,
 } from './layouts';
@@ -83,7 +83,7 @@ const COMPONENTS = [
   ThemeSettingsComponent,
   TinyMCEComponent,
   OneColumnLayoutComponent,
-  // SampleLayoutComponent,
+  SampleLayoutComponent,
   // ThreeColumnsLayoutComponent,
   // TwoColumnsLayoutComponent,
 ];
