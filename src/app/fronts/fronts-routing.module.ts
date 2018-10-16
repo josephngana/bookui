@@ -15,7 +15,10 @@ const routes: Routes = [{
   component: FrontsComponent,
   children: [{
     path: 'book',
-    component: BookComponent,
+    children: [
+      {path: '', component: BookComponent},
+      {path: ':domain/:id', component: BookComponent},
+    ],
   }, {
     path: '**',
     component: NotFoundComponent,
