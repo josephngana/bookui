@@ -1,9 +1,9 @@
 <!--<ngx-one-column-layout>-->
-  <!--<nb-menu [items]="menu"></nb-menu>-->
-  <!--<router-outlet></router-outlet>-->
+<!--<nb-menu [items]="menu"></nb-menu>-->
+<!--<router-outlet></router-outlet>-->
 <!--</ngx-one-column-layout>-->
 
 <ngx-sample-layout>
-<nb-menu [items]="menu"></nb-menu>
-<router-outlet></router-outlet>
+  <nb-menu [items]="menus" [nbSpinner]="loading" nbSpinnerStatus="info"></nb-menu>
+  <router-outlet></router-outlet>
 </ngx-sample-layout>

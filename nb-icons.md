@@ -16,7 +16,7 @@
     nb-arrow-up
     nb-audio
     nb-bar-chart
-    nb-chekmark
+    nb-checkmark
     nb-chevron-down
     nb-chevron-down-outline
     nb-chevron-left
