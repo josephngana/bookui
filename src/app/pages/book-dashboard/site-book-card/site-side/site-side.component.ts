@@ -7,6 +7,8 @@ import {Toast, ToasterConfig, ToasterService} from 'angular2-toaster';
 import {ToasterUtils} from '../../../../conf/util';
 import {AppUtil} from '../../../../conf/app-util';
 
+import 'style-loader!angular2-toaster/toaster.css';
+
 @Component({
   selector: 'ngx-site-side',
   templateUrl: './site-side.component.html',
@@ -18,19 +20,7 @@ export class SiteSideComponent implements OnInit {
   source: LocalDataSource;
   sites: Site[];
   loading: boolean;
-
-  private toasterService: ToasterService;
-
-  // toaster configuration
-  public toasterConfig: ToasterConfig = new ToasterConfig({
-    positionClass: ToasterUtils.POSITION_CLASS,
-    timeout: ToasterUtils.TIMEOUT,
-    newestOnTop: ToasterUtils.NEWEST_ON_TOP,
-    tapToDismiss: ToasterUtils.TAP_TO_DISMISS,
-    preventDuplicates: ToasterUtils.PREVENT_DUPLICATE,
-    animation: ToasterUtils.ANIMATION_TYPE.fade,
-    limit: ToasterUtils.LIMIT,
-  });
+  toasterConfig: ToasterConfig;
 
   // settings for smart table
   settings = {
@@ -59,8 +49,7 @@ export class SiteSideComponent implements OnInit {
   };
 
   constructor(private siteService: SiteService,
-              toasterService: ToasterService) {
-    this.toasterService = toasterService;
+              private toasterService: ToasterService) {
   }
 
   ngOnInit() {
@@ -97,6 +86,7 @@ export class SiteSideComponent implements OnInit {
    * @param info: string
    */
   private showInformation(type: string, title: string, info: string): void {
+    this.toasterConfig = ToasterUtils.TOASTER_CONFIG;
     const toast: Toast = AppUtil.makeToast(type, title, info);
     this.toasterService.popAsync(toast);
   }

@@ -1,3 +1,4 @@
+import {AppUtil} from '../../../../conf/app-util';
 
 export class Book {
   siteId: string;
@@ -10,5 +11,11 @@ export class Book {
   author: string;
   publisher: string;
   datePublished: Date;
-  dateCreated: Date = new Date();
+  dateCreated: Date;
+
+  constructor() {
+    this.bookId = AppUtil.getId();
+    this.bookDescription = this.story = this.isbn = this.eisbn = ''
+    this.dateCreated = new Date();
+  }
 }

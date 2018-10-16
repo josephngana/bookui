@@ -1,11 +1,17 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { BookComponent } from './book.component';
+import {ThemeModule} from '../../@theme/theme.module';
+import {ToasterModule} from 'angular2-toaster';
+
+const components = [
+  BookComponent,
+];
 
 @NgModule({
   imports: [
-    CommonModule
+    ThemeModule,
+    ToasterModule.forRoot(),
   ],
-  declarations: [BookComponent]
+  declarations: [...components],
 })
 export class BookModule { }
